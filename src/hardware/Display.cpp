@@ -45,8 +45,3 @@ Adafruit_ST7789 &Display::configure()
 
 uint16_t Display::getWidth() const { return SCREEN_WIDTH; }
 uint16_t Display::getHeight() const { return SCREEN_HEIGHT; }
-
-Display::Display()
-{
-  // Empty constructor. Add any setup code for Display class here if needed.
-}
