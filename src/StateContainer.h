@@ -32,6 +32,9 @@ public:
     void setHVACMode(HVACMode hvacMode);
     void setFanSpeed(int fanSpeed);
 
+    void incrementSetPoint();
+    void decrementSetPoint();
+
 private:
     float temperature_;
     float humidity_;

@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Adafruit_ST7789.h>
 
+#include "views/BaseView.h"
 #include "hardware/Display.h"
 #include "hardware/EnvSensor.h"
 #include "hardware/Input.h"
@@ -14,9 +15,11 @@ Input &input = Input::shared();
 
 Adafruit_ST7789 &tft = Display::shared().configure();
 StatusView statusView(tft, state);
+BaseView &activeView = statusView;
 
 void handleInput(InputEvent event) {
   Serial.print(F("forwarded input"));
+  activeView.handleInputEvent(event);
 }
 
 void updateEnvironmentData(float temp, float humidity)

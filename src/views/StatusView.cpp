@@ -41,6 +41,20 @@ void StatusView::draw()
   tft.print("HEAT");
 }
 
-void StatusView::handleInputEvent(InputEvent event) {
-  
+void StatusView::handleInputEvent(InputEvent event)
+{
+  switch (event)
+  {
+  case InputEvent::RotaryUp:
+    state.incrementSetPoint();
+    draw();
+    break;
+  case InputEvent::RotaryDown:
+    state.decrementSetPoint();
+    draw();
+    break;
+
+  default:
+    break;
+  }
 }
