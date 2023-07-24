@@ -2,9 +2,12 @@
 #define SRC_VIEWS_BASEVIEW
 
 #include "hardware/Display.h"
+#include "hardware/Input.h"
 
 #include <Arduino.h>
 #include <Adafruit_ST7789.h>
+
+
 
 class BaseView
 {
@@ -13,6 +16,8 @@ public:
         : tft(tft), width(Display::shared().getWidth()), height(Display::shared().getHeight()) {}
 
     virtual void draw() = 0; // declare a pure virtual function
+
+    virtual void handleInputEvent(InputEvent event) = 0;
 
 protected:
     void drawTextRightAligned(int y, const String &text)

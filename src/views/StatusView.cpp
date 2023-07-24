@@ -5,19 +5,29 @@
 
 void StatusView::draw()
 {
-  Display::shared().clearScreen();
 
-  tft.setTextColor(ST77XX_RED);
+  // retrieve values from state
+  float temp = state.getTemperature();
+  float humidity = state.getHumidity();
+  float setPoint = state.getSetPoint();
+  HVACMode mode = state.getHVACMode();
+
+  // populate text based on state values
+  // (you'll need to convert the floats to strings)
+  tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
+
   tft.setTextSize(7);
-  BaseView::drawTextRightAligned(0, "60F");
+  BaseView::drawTextRightAligned(0, String(int(temp)) + "F");
 
-  tft.setTextColor(ST77XX_BLUE);
+  tft.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
   tft.setTextSize(4);
-  BaseView::drawTextRightAligned(60, "52%RH");
+  BaseView::drawTextRightAligned(60, String(int(humidity)) + "%RH");
 
-  tft.setTextColor(ST77XX_WHITE);
+  tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
   tft.setTextSize(2);
-  BaseView::drawTextRightAligned(100, "Set: 62");
+  BaseView::drawTextRightAligned(100, "Set: " + String(setPoint));
+
+  tft.setTextSize(2);
 
   tft.setTextSize(2);
 
@@ -29,4 +39,8 @@ void StatusView::draw()
 
   tft.setCursor(0, height - 20);
   tft.print("HEAT");
+}
+
+void StatusView::handleInputEvent(InputEvent event) {
+  
 }
