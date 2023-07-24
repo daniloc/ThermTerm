@@ -15,6 +15,10 @@ Input &input = Input::shared();
 Adafruit_ST7789 &tft = Display::shared().configure();
 StatusView statusView(tft, state);
 
+void handleInput(InputEvent event) {
+  Serial.print(F("forwarded input"));
+}
+
 void updateEnvironmentData(float temp, float humidity)
 {
 
@@ -34,6 +38,7 @@ void setup(void)
   Serial.print(F("Hello! Feather TFT Test"));
 
   sensor.setCallback(updateEnvironmentData);
+  input.setCallback(handleInput);
 
   sensor.configure();
   input.configure();

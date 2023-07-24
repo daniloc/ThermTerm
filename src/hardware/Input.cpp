@@ -11,6 +11,8 @@ Adafruit_seesaw rotaryEncoder;
 seesaw_NeoPixel encoderPixel = seesaw_NeoPixel(1, ENCODER_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 int32_t encoder_position;
 
+InputHandlingCallback Input::inputHandlingCallback = nullptr;
+
 unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
 unsigned long debounceDelay = 50;
 bool lastButtonState = false;
@@ -30,7 +32,7 @@ void handleButton0Press()
     if ((millis() - lastInterruptTime0) > debounceTime)
     {
         Serial.println(F("Button 0 pressed"));
-        
+        Input::shared().processInput(InputEvent::Button0);
     }
     lastInterruptTime0 = millis();
 }
@@ -40,6 +42,7 @@ void handleButton1Press()
     if ((millis() - lastInterruptTime1) > debounceTime)
     {
         Serial.println(F("Button 1 pressed"));
+        Input::shared().processInput(InputEvent::Button1);
     }
     lastInterruptTime1 = millis();
 }
@@ -49,6 +52,7 @@ void handleButton2Press()
     if ((millis() - lastInterruptTime2) > debounceTime)
     {
         Serial.println(F("Button 2 pressed"));
+        Input::shared().processInput(InputEvent::Button2);
     }
     lastInterruptTime2 = millis();
 }
@@ -74,19 +78,30 @@ uint32_t Wheel(byte WheelPos)
 
 // *** Input Handlers
 
+void Input::processInput(InputEvent input)
+{
+    if (inputHandlingCallback != nullptr)
+    {
+        inputHandlingCallback(input);
+    }
+}
+
 void Input::handleRotaryButton()
 {
     Serial.print(F("Rotary button"));
+    processInput(InputEvent::RotaryButton);
 }
 
 void Input::handleRotaryUp()
 {
     Serial.print(F("Rotary up"));
+    processInput(InputEvent::RotaryUp);
 }
 
 void Input::handleRotaryDown()
 {
     Serial.print(F("Rotary down"));
+    processInput(InputEvent::RotaryDown);
 }
 
 // *** Lifecycle
@@ -225,4 +240,9 @@ void Input::configure()
     attachInterrupt(digitalPinToInterrupt(BUTTON0_PIN), handleButton0Press, FALLING);
     attachInterrupt(digitalPinToInterrupt(BUTTON1_PIN), handleButton1Press, HIGH);
     attachInterrupt(digitalPinToInterrupt(BUTTON2_PIN), handleButton2Press, HIGH);
+}
+
+void Input::setCallback(InputHandlingCallback callback)
+{
+    inputHandlingCallback = callback;
 }

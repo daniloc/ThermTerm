@@ -29,6 +29,8 @@ class Input : public Singleton<Input>
 public:
     void configure();
     void heartbeat();
+    void setCallback(InputHandlingCallback callback);
+    void processInput(InputEvent input);
 
 private:
     bool readRotaryButton();
