@@ -41,6 +41,7 @@ private:
     float setPoint_;
     HVACMode hvacMode_;
     int fanSpeed_;
+    void updateMitsubishiInterface();
 };
 
 #endif // SRC_STATECONTAINER
