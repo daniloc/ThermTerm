@@ -6,6 +6,8 @@
 #include "hardware/EnvSensor.h"
 #include "hardware/Input.h"
 
+#include "network/HAIntegration.h"
+
 #include "views/StatusView.h"
 #include "StateContainer.h"
 #include "hardware/WifiInterface.h"
@@ -14,6 +16,7 @@
 StateContainer state;
 EnvSensor sensor = EnvSensor();
 Input &input = Input::shared();
+HAIntegration haIntegration;
 
 Adafruit_ST7789 &tft = Display::shared().configure();
 StatusView statusView(tft, state);
@@ -50,10 +53,12 @@ void setup(void)
   statusView.draw();
 
   WifiInterface::shared().configure();
+  haIntegration.configure();
 }
 
 void loop()
 {
   sensor.heartbeat();
   input.heartbeat();
+  haIntegration.heartbeat();
 }

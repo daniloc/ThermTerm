@@ -7,7 +7,7 @@ WifiInterface::WifiInterface()
 
 void WifiInterface::configure()
 {
-    WiFi.begin(ssid, pass);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
     while (WiFi.status() != WL_CONNECTED)
     {
