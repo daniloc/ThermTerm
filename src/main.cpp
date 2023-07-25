@@ -8,6 +8,8 @@
 
 #include "views/StatusView.h"
 #include "StateContainer.h"
+#include "hardware/WifiInterface.h"
+#include <WiFi.h>
 
 StateContainer state;
 EnvSensor sensor = EnvSensor();
@@ -46,6 +48,8 @@ void setup(void)
   sensor.configure();
   input.configure();
   statusView.draw();
+
+  WifiInterface::shared().configure();
 }
 
 void loop()
