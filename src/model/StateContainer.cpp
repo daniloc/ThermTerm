@@ -11,6 +11,9 @@ WiFiClient client;
 HADevice device;
 HAMqtt mqtt(client, device);
 
+HASensorNumber humiditySensor("relative-humidity");
+HASensorNumber temperatureSensor("temperature");
+
 float setPointStep = 0.25;
 
 void StateContainer::updateMitsubishiInterface()
@@ -32,6 +35,12 @@ void StateContainer::configure()
 
     device.setName("Enviropad");
     device.setSoftwareVersion("0.1");
+
+    humiditySensor.setIcon("mdi:water-percent");
+    humiditySensor.setName("Relative Humidity");
+
+    temperatureSensor.setIcon("mdi:thermometer");
+    temperatureSensor.setName("Temperature");
 
     Serial.print("Connecting to MQTT\n");
 
@@ -55,28 +64,47 @@ int StateContainer::getFanSpeed() const { return fanSpeed_; }
 // setters
 void StateContainer::setTemperature(float temperature)
 {
-    temperature_ = temperature;
-    updateMitsubishiInterface();
+    if (temperature != temperature_)
+    {
+        temperature_ = temperature;
+        temperatureSensor.setCurrentValue(temperature_);
+    }
 }
+
 void StateContainer::setHumidity(float humidity)
 {
-    humidity_ = humidity;
-    updateMitsubishiInterface();
+    if (humidity != humidity_)
+    {
+        humidity_ = humidity;
+        humiditySensor.setCurrentValue(humidity_);
+    }
 }
+
 void StateContainer::setSetPoint(float setPoint)
 {
-    setPoint_ = setPoint;
-    updateMitsubishiInterface();
+    if (setPoint != setPoint_)
+    {
+        setPoint_ = setPoint;
+        updateMitsubishiInterface();
+    }
 }
+
 void StateContainer::setHVACMode(HVACMode hvacMode)
 {
-    hvacMode_ = hvacMode;
-    updateMitsubishiInterface();
+    if (hvacMode != hvacMode_)
+    {
+        hvacMode_ = hvacMode;
+        updateMitsubishiInterface();
+    }
 }
+
 void StateContainer::setFanSpeed(int fanSpeed)
 {
-    fanSpeed_ = fanSpeed;
-    updateMitsubishiInterface();
+    if (fanSpeed != fanSpeed_)
+    {
+        fanSpeed_ = fanSpeed;
+        updateMitsubishiInterface();
+    }
 }
 
 void StateContainer::incrementSetPoint()
