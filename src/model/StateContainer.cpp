@@ -64,7 +64,7 @@ void StateContainer::setTemperature(float temperature)
     if (temperature != temperature_)
     {
         temperature_ = temperature;
-        temperatureSensor_.setCurrentValue(temperature_);
+        temperatureSensor_.setValue(temperature_);
         Serial.print(F("logging temp update"));
     }
 }
@@ -74,7 +74,7 @@ void StateContainer::setHumidity(float humidity)
     if (humidity != humidity_)
     {
         humidity_ = humidity;
-        humiditySensor_.setCurrentValue(humidity_);
+        humiditySensor_.setValue(humidity_);
         Serial.print(F("logging humidity update"));
     }
 }
