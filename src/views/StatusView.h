@@ -2,7 +2,7 @@
 #define SRC_VIEWS_STATUSVIEW
 
 #include "BaseView.h"
-#include "StateContainer.h"
+#include "model/StateContainer.h"
 
 #include <Adafruit_ST7789.h>
 

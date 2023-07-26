@@ -1,5 +1,7 @@
-#ifndef SRC_STATECONTAINER
-#define SRC_STATECONTAINER
+#ifndef SRC_MODEL_STATECONTAINER
+#define SRC_MODEL_STATECONTAINER
+
+class HAIntegration;
 
 #include "utility/SingletonTemplate.h"
 
@@ -16,7 +18,6 @@ class StateContainer
 public:
     // constructors
     StateContainer();
-    StateContainer(float temperature, float humidity, float setPoint, HVACMode hvacMode, int fanSpeed);
 
     // getters
     float getTemperature() const;
@@ -35,6 +36,11 @@ public:
     void incrementSetPoint();
     void decrementSetPoint();
 
+    void setHAIntegration(HAIntegration *haIntegration);
+
+    void heartbeat();
+    void configure();
+
 private:
     float temperature_;
     float humidity_;
@@ -44,4 +50,4 @@ private:
     void updateMitsubishiInterface();
 };
 
-#endif // SRC_STATECONTAINER
+#endif // SRC_MODEL_STATECONTAINER

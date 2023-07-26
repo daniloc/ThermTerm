@@ -6,23 +6,22 @@
 #include "hardware/EnvSensor.h"
 #include "hardware/Input.h"
 
-#include "network/HAIntegration.h"
-
 #include "views/StatusView.h"
-#include "StateContainer.h"
+#include "model/StateContainer.h"
+
 #include "hardware/WifiInterface.h"
 #include <WiFi.h>
 
 StateContainer state;
 EnvSensor sensor = EnvSensor();
 Input &input = Input::shared();
-HAIntegration haIntegration;
 
 Adafruit_ST7789 &tft = Display::shared().configure();
 StatusView statusView(tft, state);
 BaseView &activeView = statusView;
 
-void handleInput(InputEvent event) {
+void handleInput(InputEvent event)
+{
   Serial.print(F("forwarded input"));
   activeView.handleInputEvent(event);
 }
@@ -30,13 +29,13 @@ void handleInput(InputEvent event) {
 void updateEnvironmentData(float temp, float humidity)
 {
 
-  if (temp != state.getTemperature() || humidity != state.getHumidity()) {
+  if (temp != state.getTemperature() || humidity != state.getHumidity())
+  {
 
-  state.setHumidity(humidity);
-  state.setTemperature(temp);
+    state.setHumidity(humidity);
+    state.setTemperature(temp);
 
-  statusView.draw();
-
+    statusView.draw();
   }
 }
 
@@ -53,12 +52,12 @@ void setup(void)
   statusView.draw();
 
   WifiInterface::shared().configure();
-  haIntegration.configure();
+  state.configure();
 }
 
 void loop()
 {
   sensor.heartbeat();
   input.heartbeat();
-  haIntegration.heartbeat();
+  state.heartbeat();
 }
