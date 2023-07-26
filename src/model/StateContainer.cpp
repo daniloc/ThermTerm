@@ -2,17 +2,9 @@
 #include "wifiCredentials.h"
 #include "StateContainer.h"
 
-#include <ArduinoHA.h>
-#include <WiFi.h>
-
 MitsubishiInterface mitsubishiSend;
 
 WiFiClient client;
-HADevice device;
-HAMqtt mqtt(client, device);
-
-HASensorNumber humiditySensor("relative-humidity");
-HASensorNumber temperatureSensor("temperature");
 
 float setPointStep = 0.25;
 
@@ -21,7 +13,16 @@ void StateContainer::updateMitsubishiInterface()
     mitsubishiSend.sendHvacMitsubishi(HvacMode::HVAC_COLD, 23, HvacFanMode::FAN_SPEED_5, HvacVanneMode::VANNE_AUTO, HvacPower::ON);
 }
 
-StateContainer::StateContainer() : temperature_(0), humidity_(0), setPoint_(0), hvacMode_(HVACMode::OFF), fanSpeed_(0)
+StateContainer::StateContainer() : temperature_(0),
+                                   humidity_(0),
+                                   setPoint_(0),
+                                   hvacMode_(HVACMode::OFF),
+                                   fanSpeed_(0),
+                                   macAddress_(generateMacAddress()),
+                                   haDevice_(macAddress_.c_str()),
+                                   mqtt_(client, haDevice_),
+                                   temperatureSensor_("temperature"),
+                                   humiditySensor_("relative-humidity")
 {
 }
 
@@ -29,22 +30,18 @@ void StateContainer::configure()
 {
     mitsubishiSend.prepare();
 
-    byte mac[32];
-    WiFi.macAddress(mac);
-    device.setUniqueId(mac, sizeof(mac));
+    haDevice_.setName("Enviropad");
+    haDevice_.setSoftwareVersion("0.12");
 
-    device.setName("Enviropad");
-    device.setSoftwareVersion("0.1");
+    humiditySensor_.setIcon("mdi:water-percent");
+    humiditySensor_.setName("Relative Humidity");
 
-    humiditySensor.setIcon("mdi:water-percent");
-    humiditySensor.setName("Relative Humidity");
-
-    temperatureSensor.setIcon("mdi:thermometer");
-    temperatureSensor.setName("Temperature");
+    temperatureSensor_.setIcon("mdi:thermometer");
+    temperatureSensor_.setName("Temperature");
 
     Serial.print("Connecting to MQTT\n");
 
-    if (mqtt.begin(MQTT_BROKER, MQTT_LOGIN, MQTT_PASSWORD) == true)
+    if (mqtt_.begin(MQTT_BROKER, MQTT_LOGIN, MQTT_PASSWORD) == true)
     {
         Serial.print("Connected to MQTT broker");
     }
@@ -67,7 +64,8 @@ void StateContainer::setTemperature(float temperature)
     if (temperature != temperature_)
     {
         temperature_ = temperature;
-        temperatureSensor.setCurrentValue(temperature_);
+        temperatureSensor_.setCurrentValue(temperature_);
+        Serial.print(F("logging temp update"));
     }
 }
 
@@ -76,7 +74,8 @@ void StateContainer::setHumidity(float humidity)
     if (humidity != humidity_)
     {
         humidity_ = humidity;
-        humiditySensor.setCurrentValue(humidity_);
+        humiditySensor_.setCurrentValue(humidity_);
+        Serial.print(F("logging humidity update"));
     }
 }
 
@@ -121,5 +120,5 @@ void StateContainer::decrementSetPoint()
 
 void StateContainer::heartbeat()
 {
-    mqtt.loop();
+    mqtt_.loop();
 }

@@ -1,9 +1,10 @@
 #ifndef SRC_MODEL_STATECONTAINER
 #define SRC_MODEL_STATECONTAINER
 
-class HAIntegration;
-
 #include "utility/SingletonTemplate.h"
+
+#include <ArduinoHA.h>
+#include <WiFi.h>
 
 enum class HVACMode
 {
@@ -18,6 +19,13 @@ class StateContainer
 public:
     // constructors
     StateContainer();
+
+    static String generateMacAddress()
+    {
+        String macAddress = WiFi.macAddress();
+        macAddress.replace(":", "");
+        return macAddress;
+    }
 
     // getters
     float getTemperature() const;
@@ -36,8 +44,6 @@ public:
     void incrementSetPoint();
     void decrementSetPoint();
 
-    void setHAIntegration(HAIntegration *haIntegration);
-
     void heartbeat();
     void configure();
 
@@ -48,6 +54,11 @@ private:
     HVACMode hvacMode_;
     int fanSpeed_;
     void updateMitsubishiInterface();
+    String macAddress_;
+    HADevice haDevice_;
+    HAMqtt mqtt_;
+    HASensorNumber humiditySensor_;
+    HASensorNumber temperatureSensor_;
 };
 
 #endif // SRC_MODEL_STATECONTAINER

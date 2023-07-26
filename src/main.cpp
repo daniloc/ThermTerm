@@ -1,3 +1,4 @@
+
 #include <Arduino.h>
 #include <Adafruit_ST7789.h>
 
@@ -11,6 +12,7 @@
 
 #include "hardware/WifiInterface.h"
 #include <WiFi.h>
+
 
 StateContainer state;
 EnvSensor sensor = EnvSensor();
