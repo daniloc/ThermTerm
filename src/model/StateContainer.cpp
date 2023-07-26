@@ -13,12 +13,7 @@ void StateContainer::updateMitsubishiInterface()
     mitsubishiSend.sendHvacMitsubishi(HvacMode::HVAC_COLD, 23, HvacFanMode::FAN_SPEED_5, HvacVanneMode::VANNE_AUTO, HvacPower::ON);
 }
 
-StateContainer::StateContainer() : temperature_(0),
-                                   humidity_(0),
-                                   setPoint_(0),
-                                   hvacMode_(HVACMode::OFF),
-                                   fanSpeed_(0),
-                                   macAddress_(generateMacAddress()),
+StateContainer::StateContainer() : macAddress_(generateMacAddress()),
                                    haDevice_(macAddress_.c_str()),
                                    mqtt_(client, haDevice_),
                                    temperatureSensor_("temperature"),
@@ -52,69 +47,65 @@ void StateContainer::configure()
 }
 
 // getters
-float StateContainer::getTemperature() const { return temperature_; }
-float StateContainer::getHumidity() const { return humidity_; }
-float StateContainer::getSetPoint() const { return setPoint_; }
-HVACMode StateContainer::getHVACMode() const { return hvacMode_; }
-int StateContainer::getFanSpeed() const { return fanSpeed_; }
+StateData StateContainer::getState() { return stateData_; };
 
 // setters
 void StateContainer::setTemperature(float temperature)
 {
-    if (temperature != temperature_)
+    if (temperature != stateData_.temperature)
     {
-        temperature_ = temperature;
-        temperatureSensor_.setValue(temperature_);
+        stateData_.temperature = temperature;
+        temperatureSensor_.setValue(temperature);
         Serial.print(F("logging temp update"));
     }
 }
 
 void StateContainer::setHumidity(float humidity)
 {
-    if (humidity != humidity_)
+    if (humidity != stateData_.humidity)
     {
-        humidity_ = humidity;
-        humiditySensor_.setValue(humidity_);
+        stateData_.humidity = humidity;
+        humiditySensor_.setValue(humidity);
         Serial.print(F("logging humidity update"));
     }
 }
 
 void StateContainer::setSetPoint(float setPoint)
 {
-    if (setPoint != setPoint_)
+    if (setPoint != stateData_.setPoint)
     {
-        setPoint_ = setPoint;
+        stateData_.setPoint = setPoint;
         updateMitsubishiInterface();
     }
 }
 
-void StateContainer::setHVACMode(HVACMode hvacMode)
+void StateContainer::setHVACMode(HvacMode hvacMode)
 {
-    if (hvacMode != hvacMode_)
+    if (hvacMode != stateData_.hvacMode)
     {
-        hvacMode_ = hvacMode;
+        stateData_.hvacMode = hvacMode;
         updateMitsubishiInterface();
     }
 }
 
-void StateContainer::setFanSpeed(int fanSpeed)
+void StateContainer::setFanSpeed(HvacFanMode fanSpeed)
 {
-    if (fanSpeed != fanSpeed_)
+    if (fanSpeed != stateData_.fanSpeed)
     {
-        fanSpeed_ = fanSpeed;
+        stateData_.fanSpeed = fanSpeed;
         updateMitsubishiInterface();
     }
 }
 
 void StateContainer::incrementSetPoint()
 {
-    setPoint_ += setPointStep;
+    stateData_.setPoint += setPointStep;
     updateMitsubishiInterface();
 }
 
 void StateContainer::decrementSetPoint()
 {
-    setPoint_ -= setPointStep;
+    stateData_.setPoint -= setPointStep;
     updateMitsubishiInterface();
 }
 

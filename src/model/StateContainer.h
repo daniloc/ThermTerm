@@ -2,17 +2,10 @@
 #define SRC_MODEL_STATECONTAINER
 
 #include "utility/SingletonTemplate.h"
+#include "model/StateData.h"
 
 #include <ArduinoHA.h>
 #include <WiFi.h>
-
-enum class HVACMode
-{
-    OFF,
-    FAN,
-    COOL,
-    HOT
-};
 
 class StateContainer
 {
@@ -28,18 +21,14 @@ public:
     }
 
     // getters
-    float getTemperature() const;
-    float getHumidity() const;
-    float getSetPoint() const;
-    HVACMode getHVACMode() const;
-    int getFanSpeed() const;
+    StateData getState();
 
     // setters
     void setTemperature(float temperature);
     void setHumidity(float humidity);
     void setSetPoint(float setPoint);
-    void setHVACMode(HVACMode hvacMode);
-    void setFanSpeed(int fanSpeed);
+    void setHVACMode(HvacMode hvacMode);
+    void setFanSpeed(HvacFanMode fanSpeed);
 
     void incrementSetPoint();
     void decrementSetPoint();
@@ -48,11 +37,7 @@ public:
     void configure();
 
 private:
-    float temperature_;
-    float humidity_;
-    float setPoint_;
-    HVACMode hvacMode_;
-    int fanSpeed_;
+    StateData stateData_;
     void updateMitsubishiInterface();
     String macAddress_;
     HADevice haDevice_;

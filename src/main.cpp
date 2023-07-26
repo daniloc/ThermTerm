@@ -31,7 +31,7 @@ void handleInput(InputEvent event)
 void updateEnvironmentData(float temp, float humidity)
 {
 
-  if (temp != state.getTemperature() || humidity != state.getHumidity())
+  if (temp != state.getState().temperature || humidity != state.getState().humidity)
   {
 
     state.setHumidity(humidity);
