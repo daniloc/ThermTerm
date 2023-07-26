@@ -3,22 +3,14 @@
 
 #include "utility/SingletonTemplate.h"
 #include "model/StateData.h"
+#include "network/HAInterface.h"
 
-#include <ArduinoHA.h>
-#include <WiFi.h>
 
 class StateContainer
 {
 public:
     // constructors
     StateContainer();
-
-    static String generateMacAddress()
-    {
-        String macAddress = WiFi.macAddress();
-        macAddress.replace(":", "");
-        return macAddress;
-    }
 
     // getters
     StateData getState();
@@ -39,11 +31,8 @@ public:
 private:
     StateData stateData_;
     void updateMitsubishiInterface();
-    String macAddress_;
-    HADevice haDevice_;
-    HAMqtt mqtt_;
-    HASensorNumber humiditySensor_;
-    HASensorNumber temperatureSensor_;
+    HAInterface haInterface_;
+
 };
 
 #endif // SRC_MODEL_STATECONTAINER
