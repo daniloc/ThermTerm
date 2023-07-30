@@ -66,6 +66,7 @@ void StateContainer::handleRemoteModeChange(HAHVAC::Mode newMode, HAHVAC *sender
 
     sender->setMode(newMode);
     updateMitsubishiInterface();
+    notifyObservers();
 }
 
 void StateContainer::handleRemotePowerChange(bool powerState, HAHVAC *sender)
@@ -77,6 +78,7 @@ void StateContainer::handleRemotePowerChange(bool powerState, HAHVAC *sender)
     }
 
     updateMitsubishiInterface();
+    notifyObservers();
 }
 
 void StateContainer::handleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *sender)
@@ -86,6 +88,7 @@ void StateContainer::handleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *
     stateData_.power = ON;
     sender->setFanMode(fanMode);
     updateMitsubishiInterface();
+    notifyObservers();
 }
 
 void StateContainer::handleRemoteTargetTemperatureChange(HANumeric temperature, HAHVAC *sender)
@@ -136,6 +139,7 @@ void StateContainer::setSetPoint(float setPoint)
         stateData_.setPoint = setPoint;
         haInterface_.getHVACDevice().setTargetTemperature(setPoint);
         updateMitsubishiInterface();
+        notifyObservers();
     }
 }
 

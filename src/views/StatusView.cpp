@@ -55,3 +55,8 @@ void StatusView::handleInputEvent(InputEvent event)
     break;
   }
 }
+
+void StatusView::objectDidChange()
+{
+  draw();
+}

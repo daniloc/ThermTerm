@@ -9,13 +9,17 @@
 class StatusView : public BaseView
 {
 public:
-    StatusView(Adafruit_ST7789 &tft, StateContainer &state) : BaseView(tft), state(state) {} // add state argument
+    StatusView(Adafruit_ST7789 &tft, StateContainer &state) : BaseView(tft), state(state) {
+        state.registerObserver(this);
+    } 
 
     void draw() override;
     void handleInputEvent(InputEvent event) override;
 
+
 private:
     StateContainer &state;
+    void objectDidChange() override;
 };
 
 #endif // SRC_VIEWS_STATUSVIEW

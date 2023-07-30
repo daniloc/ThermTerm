@@ -5,7 +5,9 @@
 #include "model/StateData.h"
 #include "network/HAInterface.h"
 
-class StateContainer
+#include "utility/Observation.h"
+
+class StateContainer: public Subject<Observer, 5>
 {
 public:
     // constructors

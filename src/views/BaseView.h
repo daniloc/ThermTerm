@@ -7,9 +7,9 @@
 #include <Arduino.h>
 #include <Adafruit_ST7789.h>
 
+#include "utility/Observation.h"
 
-
-class BaseView
+class BaseView : public Observer
 {
 public:
     BaseView(Adafruit_ST7789 &tft)
