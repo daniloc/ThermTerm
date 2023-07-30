@@ -9,7 +9,7 @@ class HAInterface
 
 public:
     HAInterface();
-    void configure();
+    void configure(bool);
     void heartbeat();
 
     static String generateMacAddress()

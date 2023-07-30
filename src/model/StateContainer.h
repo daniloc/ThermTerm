@@ -5,7 +5,6 @@
 #include "model/StateData.h"
 #include "network/HAInterface.h"
 
-
 class StateContainer
 {
 public:
@@ -28,11 +27,24 @@ public:
     void heartbeat();
     void configure();
 
+    // non-static member functions
+    void handleRemotePowerChange(bool powerState, HAHVAC *sender);
+    void handleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *sender);
+    void handleRemoteTargetTemperatureChange(HANumeric temperature, HAHVAC *sender);
+    void handleRemoteModeChange(HAHVAC::Mode, HAHVAC *);
+
+    // static member functions
+    static void staticHandleRemotePowerChange(bool powerState, HAHVAC *sender);
+    static void staticHandleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *sender);
+    static void staticHandleRemoteTargetTemperatureChange(HANumeric temperature, HAHVAC *sender);
+    static void staticHandleRemoteModeChange(HAHVAC::Mode, HAHVAC *);
+
 private:
     StateData stateData_;
     void updateMitsubishiInterface();
     HAInterface haInterface_;
 
+    static StateContainer *instance; // static pointer to store instance of StateContainer
 };
 
 #endif // SRC_MODEL_STATECONTAINER
