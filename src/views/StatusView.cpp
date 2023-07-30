@@ -3,6 +3,8 @@
 
 #include <Adafruit_GFX.h> // Core graphics library
 
+#define humidityMeterColor 0x0C34
+
 void StatusView::draw()
 {
 
@@ -11,31 +13,58 @@ void StatusView::draw()
 
   // populate text based on state values
   // (you'll need to convert the floats to strings)
-  tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
+
+  uint16_t tempMeterColor;
+
+  if (stateData.power == OFF)
+  {
+    tempMeterColor = ST77XX_WHITE;
+  }
+  else if (stateData.hvacMode == HVAC_HOT)
+  { // heat
+    tempMeterColor = ST77XX_RED;
+  }
+  else if (stateData.hvacMode == HVAC_COLD)
+  { // cool
+    tempMeterColor = ST77XX_BLUE;
+  }
+  else
+  { // other modes
+    tempMeterColor = ST77XX_WHITE;
+  }
+
+  tft.setTextColor(tempMeterColor, ST77XX_BLACK);
 
   tft.setTextSize(7);
   BaseView::drawTextRightAligned(0, String(int(stateData.temperature)) + "F");
 
-  tft.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
+  tft.setTextColor(humidityMeterColor, ST77XX_BLACK);
   tft.setTextSize(4);
   BaseView::drawTextRightAligned(60, String(int(stateData.humidity)) + "%RH");
 
-  tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
-  tft.setTextSize(2);
-  BaseView::drawTextRightAligned(100, "Set: " + String(stateData.setPoint));
-
   tft.setTextSize(2);
 
-  tft.setTextSize(2);
+  if (stateData.power == ON)
+  {
+    tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
+    } else {
+    tft.setTextColor(ST77XX_BLACK, ST77XX_BLACK);
+    }
 
-  tft.setCursor(0, 0);
-  tft.print("COOL");
+    BaseView::drawTextRightAligned(100, "Set: " + String(stateData.setPoint));
 
-  tft.setCursor(0, (height / 2) - 10);
-  tft.print("OFF");
+    tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
 
-  tft.setCursor(0, height - 20);
-  tft.print("HEAT");
+    tft.setTextSize(2);
+
+    tft.setCursor(0, 0);
+    tft.print("COOL");
+
+    tft.setCursor(0, (height / 2) - 10);
+    tft.print("OFF");
+
+    tft.setCursor(0, height - 20);
+    tft.print("HEAT");
 }
 
 void StatusView::handleInputEvent(InputEvent event)

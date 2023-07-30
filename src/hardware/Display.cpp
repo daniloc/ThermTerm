@@ -9,10 +9,6 @@ uint16_t screenFillColor = ST77XX_BLACK;
 
 void Display::drawInitScreen()
 {
-  tft.setCursor(0, 0);
-  tft.setTextColor(ST77XX_WHITE);
-  tft.setTextWrap(true);
-  tft.print("Enviropad Initialized");
 }
 
 void Display::clearScreen()
