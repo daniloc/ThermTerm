@@ -180,7 +180,7 @@ void MitsubishiInterface::sendHvacMitsubishi(
 
   IrSender.space(0);
 
-  for (int j = 0; j < 4; j++)
+  for (int j = 0; j < 2; j++)
   { // For Mitsubishi IR protocol we have to send two time the packet data
     // Header for the Packet
     IrSender.mark(HVAC_MITSUBISHI_HDR_MARK);
