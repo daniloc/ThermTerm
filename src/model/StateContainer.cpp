@@ -38,6 +38,25 @@ HvacMode convertMode(HAHVAC::Mode mode)
     }
 }
 
+HAHVAC::Mode reverseConvertMode(HvacMode mode)
+{
+    switch (mode)
+    {
+    case HVAC_AUTO:
+        return HAHVAC::AutoMode;
+    case HVAC_COLD:
+        return HAHVAC::CoolMode;
+    case HVAC_HOT:
+        return HAHVAC::HeatMode;
+    case HVAC_DRY:
+        return HAHVAC::DryMode;
+    case HVAC_FAN:
+        return HAHVAC::FanOnlyMode;
+    default:
+        return HAHVAC::AutoMode; // default value
+    }
+}
+
 HvacFanMode convertFanMode(HAHVAC::FanMode haFanMode)
 {
     switch (haFanMode)
@@ -73,8 +92,10 @@ void StateContainer::handleRemotePowerChange(bool powerState, HAHVAC *sender)
 {
     if (powerState) {
         stateData_.power = ON;
+        haInterface_.getHVACDevice().setMode(sender->getCurrentMode());
     } else {
         stateData_.power = OFF;
+        haInterface_.getHVACDevice().setMode(HAHVAC::Mode::OffMode);
     }
 
     updateMitsubishiInterface();
@@ -145,11 +166,12 @@ void StateContainer::setSetPoint(float setPoint)
 
 void StateContainer::setHVACMode(HvacMode hvacMode)
 {
-    if (hvacMode != stateData_.hvacMode)
-    {
+
         stateData_.hvacMode = hvacMode;
+        stateData_.power = ON;
+        haInterface_.getHVACDevice().setMode(reverseConvertMode(hvacMode));
         updateMitsubishiInterface();
-    }
+        notifyObservers();
 }
 
 void StateContainer::setFanSpeed(HvacFanMode fanSpeed)
@@ -173,6 +195,13 @@ void StateContainer::decrementSetPoint()
     float setPoint = stateData_.setPoint;
     setPoint -= setPointStep;
     setSetPoint(setPoint);
+}
+
+void StateContainer::turnOff() {
+    stateData_.power = OFF;
+    haInterface_.getHVACDevice().setMode(HAHVAC::Mode::OffMode);
+    updateMitsubishiInterface();
+    notifyObservers();
 }
 
 void StateContainer::heartbeat()

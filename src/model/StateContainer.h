@@ -22,6 +22,7 @@ public:
     void setSetPoint(float setPoint);
     void setHVACMode(HvacMode hvacMode);
     void setFanSpeed(HvacFanMode fanSpeed);
+    void turnOff();
 
     void incrementSetPoint();
     void decrementSetPoint();

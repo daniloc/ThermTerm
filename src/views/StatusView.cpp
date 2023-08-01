@@ -47,24 +47,26 @@ void StatusView::draw()
   if (stateData.power == ON)
   {
     tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
-    } else {
+  }
+  else
+  {
     tft.setTextColor(ST77XX_BLACK, ST77XX_BLACK);
-    }
+  }
 
-    BaseView::drawTextRightAligned(100, "Set: " + String(stateData.setPoint));
+  BaseView::drawTextRightAligned(100, "Set: " + String(stateData.setPoint));
 
-    tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
+  tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
 
-    tft.setTextSize(2);
+  tft.setTextSize(2);
 
-    tft.setCursor(0, 0);
-    tft.print("COOL");
+  tft.setCursor(0, 0);
+  tft.print("COOL");
 
-    tft.setCursor(0, (height / 2) - 10);
-    tft.print("OFF");
+  tft.setCursor(0, (height / 2) - 10);
+  tft.print("OFF");
 
-    tft.setCursor(0, height - 20);
-    tft.print("HEAT");
+  tft.setCursor(0, height - 20);
+  tft.print("HEAT");
 }
 
 void StatusView::handleInputEvent(InputEvent event)
@@ -73,11 +75,18 @@ void StatusView::handleInputEvent(InputEvent event)
   {
   case InputEvent::RotaryUp:
     state.incrementSetPoint();
-    draw();
     break;
   case InputEvent::RotaryDown:
     state.decrementSetPoint();
-    draw();
+    break;
+  case InputEvent::Button0:
+    state.setHVACMode(HVAC_COLD);
+    break;
+  case InputEvent::Button1:
+    state.turnOff();
+    break;
+  case InputEvent::Button2:
+    state.setHVACMode(HVAC_HOT);
     break;
 
   default:

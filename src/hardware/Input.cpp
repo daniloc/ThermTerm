@@ -2,6 +2,10 @@
 #include "Adafruit_seesaw.h"
 #include "seesaw_neopixel.h"
 
+#include <queue>
+
+std::queue<InputEvent> eventQueue;
+
 #define ENCODER_SWITCH 24
 #define ENCODER_NEOPIXEL 6
 
@@ -32,7 +36,7 @@ void handleButton0Press()
     if ((millis() - lastInterruptTime0) > debounceTime)
     {
         Serial.println(F("Button 0 pressed"));
-        Input::shared().processInput(InputEvent::Button0);
+        eventQueue.push(InputEvent::Button0);
     }
     lastInterruptTime0 = millis();
 }
@@ -42,7 +46,7 @@ void handleButton1Press()
     if ((millis() - lastInterruptTime1) > debounceTime)
     {
         Serial.println(F("Button 1 pressed"));
-        Input::shared().processInput(InputEvent::Button1);
+        eventQueue.push(InputEvent::Button1);
     }
     lastInterruptTime1 = millis();
 }
@@ -52,7 +56,7 @@ void handleButton2Press()
     if ((millis() - lastInterruptTime2) > debounceTime)
     {
         Serial.println(F("Button 2 pressed"));
-        Input::shared().processInput(InputEvent::Button2);
+        eventQueue.push(InputEvent::Button2);
     }
     lastInterruptTime2 = millis();
 }
@@ -128,6 +132,12 @@ void Input::heartbeat()
     {
         handleRotaryButton();
     }
+
+    while (!eventQueue.empty())
+    {
+        inputHandlingCallback(eventQueue.front());
+        eventQueue.pop();
+    }
 }
 
 bool Input::readRotaryButton()
@@ -199,6 +209,14 @@ RotaryDirection Input::readRotaryPosition()
 void Input::configure()
 {
 
+    // Attach buttoninterrupts
+
+    pinMode(BUTTON0_PIN, INPUT_PULLUP);
+
+    attachInterrupt(digitalPinToInterrupt(BUTTON0_PIN), handleButton0Press, FALLING);
+    attachInterrupt(digitalPinToInterrupt(BUTTON1_PIN), handleButton1Press, HIGH);
+    attachInterrupt(digitalPinToInterrupt(BUTTON2_PIN), handleButton2Press, HIGH);
+
     //***Rotary Encoder***
 
     Serial.println("Looking for seesaw!");
@@ -235,11 +253,6 @@ void Input::configure()
 
     rotaryEncoder.setGPIOInterrupts((uint32_t)1 << ENCODER_SWITCH, 1);
     rotaryEncoder.enableEncoderInterrupt();
-
-    // Attach interrupts
-    attachInterrupt(digitalPinToInterrupt(BUTTON0_PIN), handleButton0Press, FALLING);
-    attachInterrupt(digitalPinToInterrupt(BUTTON1_PIN), handleButton1Press, HIGH);
-    attachInterrupt(digitalPinToInterrupt(BUTTON2_PIN), handleButton2Press, HIGH);
 }
 
 void Input::setCallback(InputHandlingCallback callback)
