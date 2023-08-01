@@ -31,6 +31,8 @@ volatile unsigned long lastInterruptTime1 = 0;
 volatile unsigned long lastInterruptTime2 = 0;
 unsigned long debounceTime = 500; // Debounce time in milliseconds
 
+
+
 void handleButton0Press()
 {
     if ((millis() - lastInterruptTime0) > debounceTime)

@@ -3,23 +3,30 @@
 
 #include "BaseView.h"
 #include "model/StateContainer.h"
+#include "views/DialView.h"
 
 #include <Adafruit_ST7789.h>
 
 class StatusView : public BaseView
 {
 public:
-    StatusView(Adafruit_ST7789 &tft, StateContainer &state) : BaseView(tft), state(state) {
+    StatusView(Adafruit_ST7789 &tft, StateContainer &state)
+        : BaseView(tft),
+          state(state),
+          dialView_(tft, state, *this)
+    {
         state.registerObserver(this);
-    } 
+    }
 
     void draw() override;
     void handleInputEvent(InputEvent event) override;
-
+    void heartbeat();
 
 private:
     StateContainer &state;
+    DialView dialView_;
     void objectDidChange() override;
+    unsigned long lastInputEventTime = 0;
 };
 
 #endif // SRC_VIEWS_STATUSVIEW

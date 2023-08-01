@@ -15,6 +15,7 @@ public:
 
     // getters
     StateData getState();
+    HvacFanMode getFanSpeed() {return stateData_.fanSpeed;};
 
     // setters
     void setTemperature(float temperature);

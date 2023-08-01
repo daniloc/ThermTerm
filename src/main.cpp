@@ -63,4 +63,5 @@ void loop()
   sensor.heartbeat();
   input.heartbeat();
   state.heartbeat();
+  statusView.heartbeat();
 }

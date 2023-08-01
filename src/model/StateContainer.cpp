@@ -176,11 +176,9 @@ void StateContainer::setHVACMode(HvacMode hvacMode)
 
 void StateContainer::setFanSpeed(HvacFanMode fanSpeed)
 {
-    if (fanSpeed != stateData_.fanSpeed)
-    {
+
         stateData_.fanSpeed = fanSpeed;
         updateMitsubishiInterface();
-    }
 }
 
 void StateContainer::incrementSetPoint()

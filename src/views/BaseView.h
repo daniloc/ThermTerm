@@ -8,6 +8,7 @@
 #include <Adafruit_ST7789.h>
 
 #include "utility/Observation.h"
+#include <queue>
 
 class BaseView : public Observer
 {
@@ -18,6 +19,8 @@ public:
     virtual void draw() = 0; // declare a pure virtual function
 
     virtual void handleInputEvent(InputEvent event) = 0;
+
+    std::queue<BaseView*> viewHierarchy;
 
 protected:
     void drawTextRightAligned(int y, const String &text)

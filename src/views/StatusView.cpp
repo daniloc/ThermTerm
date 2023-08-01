@@ -4,9 +4,15 @@
 #include <Adafruit_GFX.h> // Core graphics library
 
 #define humidityMeterColor 0x0C34
+#define modalViewDuration 3000
 
 void StatusView::draw()
 {
+  if (viewHierarchy.size() > 0)
+  {
+    viewHierarchy.front()->draw();
+    return;
+  }
 
   // retrieve values from state
   StateData stateData = state.getState();
@@ -71,6 +77,17 @@ void StatusView::draw()
 
 void StatusView::handleInputEvent(InputEvent event)
 {
+
+  lastInputEventTime = millis();
+
+  if (viewHierarchy.size() > 0)
+  {
+    Serial.print("redirecting input");
+    viewHierarchy.front()->handleInputEvent(event);
+
+    return;
+  }
+
   switch (event)
   {
   case InputEvent::RotaryUp:
@@ -88,13 +105,30 @@ void StatusView::handleInputEvent(InputEvent event)
   case InputEvent::Button2:
     state.setHVACMode(HVAC_HOT);
     break;
-
+  case InputEvent::RotaryButton:
+    viewHierarchy.push(&dialView_);
+    draw();
   default:
     break;
   }
+
 }
 
 void StatusView::objectDidChange()
 {
   draw();
+}
+
+void StatusView::heartbeat() {
+  if (millis() - lastInputEventTime >= modalViewDuration)
+  {
+    // Dismiss the dial view
+    if (!viewHierarchy.empty() && viewHierarchy.front() == &dialView_)
+    {
+      viewHierarchy.pop();
+      lastInputEventTime = millis(); // Reset the timer after dismissing the view
+      Display::shared().clearScreen();
+      draw();
+    }
+  }
 }
