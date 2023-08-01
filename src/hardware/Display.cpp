@@ -20,7 +20,7 @@ Adafruit_ST7789 &Display::configure()
 {
   // turn on backlite
   pinMode(TFT_BACKLITE, OUTPUT);
-  digitalWrite(TFT_BACKLITE, HIGH);
+  analogWrite(TFT_BACKLITE, 64);
 
   // turn on the TFT / I2C power supply
   pinMode(TFT_I2C_POWER, OUTPUT);
