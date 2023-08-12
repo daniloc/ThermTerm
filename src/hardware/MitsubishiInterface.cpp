@@ -1,4 +1,7 @@
 #include "MitsubishiInterface.h"
+
+#define SEND_PWM_BY_TIMER
+
 #include <IRremote.hpp>
 
 void MitsubishiInterface::prepare()
@@ -178,7 +181,7 @@ void MitsubishiInterface::sendHvacMitsubishi(
   Serial.println(".");
 #endif
 
-  IrSender.space(0);
+Serial.flush();
 
   for (int j = 0; j < 2; j++)
   { // For Mitsubishi IR protocol we have to send two time the packet data
@@ -188,7 +191,7 @@ void MitsubishiInterface::sendHvacMitsubishi(
     for (i = 0; i < 18; i++)
     {
       // Send all Bits from Byte Data in Reverse Order
-      for (mask = 00000001; mask > 0; mask <<= 1)
+      for (mask = 0x01; mask > 0; mask <<= 1)
       { // iterate through bit mask
         if (data[i] & mask)
         { // Bit ONE
@@ -206,6 +209,5 @@ void MitsubishiInterface::sendHvacMitsubishi(
     // End of Packet and retransmission of the Packet
     IrSender.mark(HVAC_MITSUBISHI_RPT_MARK);
     IrSender.space(HVAC_MITSUBISHI_RPT_SPACE);
-    IrSender.space(0); // Just to be sure
   }
 }
