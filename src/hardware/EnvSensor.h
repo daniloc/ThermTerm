@@ -5,9 +5,10 @@
 struct EnvData {
   float temp;
   float humidity;
+  float lux;
 };
 
-typedef void (*EnvSensorCallback)(float temp, float humidity);
+typedef void (*EnvSensorCallback)(float temp, float humidity, float lux);
 
 class EnvSensor {
     public:

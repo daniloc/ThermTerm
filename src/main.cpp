@@ -29,7 +29,7 @@ void handleInput(InputEvent event)
   activeView.handleInputEvent(event);
 }
 
-void updateEnvironmentData(float temp, float humidity)
+void updateEnvironmentData(float temp, float humidity, float lux)
 {
 
   if (temp != state.getState().temperature || humidity != state.getState().humidity)
@@ -39,6 +39,12 @@ void updateEnvironmentData(float temp, float humidity)
     state.setTemperature(temp);
 
     statusView.draw();
+  }
+
+  if (lux < 20) {
+    Display::shared().dimScreen();
+  } else {
+    Display::shared().brightScreen();
   }
 }
 

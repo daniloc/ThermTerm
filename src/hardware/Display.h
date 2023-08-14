@@ -18,6 +18,9 @@ public:
     uint16_t getWidth() const;
     uint16_t getHeight() const;
 
+    void dimScreen();
+    void brightScreen();
+
 private:
     void drawInitScreen();
     Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);

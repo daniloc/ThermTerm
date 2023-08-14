@@ -16,12 +16,20 @@ void Display::clearScreen()
   tft.fillScreen(screenFillColor);
 }
 
+void Display::dimScreen() {
+  analogWrite(TFT_BACKLITE, 2);
+}
+
+void Display::brightScreen() {
+  analogWrite(TFT_BACKLITE, 64);
+}
+ 
 Adafruit_ST7789 &Display::configure()
 {
   // turn on backlite
   pinMode(TFT_BACKLITE, OUTPUT);
-  analogWrite(TFT_BACKLITE, 64);
-
+  brightScreen();
+  
   // turn on the TFT / I2C power supply
   pinMode(TFT_I2C_POWER, OUTPUT);
   digitalWrite(TFT_I2C_POWER, HIGH);
