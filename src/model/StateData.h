@@ -8,16 +8,21 @@ struct StateData
     float temperature = 0.0;
     float humidity = 0.0;
     float setPoint = 65;
+    float lux = 0;
     HvacMode hvacMode = HVAC_COLD;
     HvacFanMode fanSpeed = FAN_SPEED_5;
     HvacPower power = OFF;
 
     bool celsius = false;
 
-    int heatPumpSetPoint() {
-        if (celsius) {
+    int heatPumpSetPoint()
+    {
+        if (celsius)
+        {
             return int(setPoint);
-        } else {
+        }
+        else
+        {
             return int((setPoint - 32) * 5.0 / 9.0);
         }
     }

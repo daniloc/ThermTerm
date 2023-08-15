@@ -22,6 +22,7 @@ public:
     // Getter methods
     HASensorNumber &getHumiditySensor() { return humiditySensor_; }
     HASensorNumber &getTemperatureSensor() { return temperatureSensor_; }
+    HASensorNumber &getLightSensor() { return lightSensor_; }
     HAHVAC &getHVACDevice() { return hvacDevice_; }
 
 private:
@@ -30,6 +31,7 @@ private:
     HAMqtt mqtt_;
     HASensorNumber humiditySensor_;
     HASensorNumber temperatureSensor_;
+    HASensorNumber lightSensor_;
     HAHVAC hvacDevice_;
 };
 

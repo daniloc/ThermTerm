@@ -32,12 +32,13 @@ void handleInput(InputEvent event)
 void updateEnvironmentData(float temp, float humidity, float lux)
 {
 
-  if (temp != state.getState().temperature || humidity != state.getState().humidity)
+  if (temp != state.getState().temperature || 
+  humidity != state.getState().humidity ||
+  lux != state.getState().lux)
   {
-
     state.setHumidity(humidity);
     state.setTemperature(temp);
-
+    state.setLux(lux);
     statusView.draw();
   }
 

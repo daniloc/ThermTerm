@@ -8,6 +8,7 @@ HAInterface::HAInterface() : macAddress_(generateMacAddress()),
                              mqtt_(client, haDevice_),
                              temperatureSensor_("temperature"),
                              humiditySensor_("relative-humidity"),
+                             lightSensor_("light-intensity"),
                              hvacDevice_(
                                  "heat-pump",
                                  HAHVAC::TargetTemperatureFeature |
@@ -24,9 +25,15 @@ void HAInterface::configure(bool useCelsius)
 
     humiditySensor_.setIcon("mdi:water-percent");
     humiditySensor_.setName("Relative Humidity");
+    humiditySensor_.setUnitOfMeasurement("%");
 
     temperatureSensor_.setIcon("mdi:thermometer");
     temperatureSensor_.setName("Temperature");
+    temperatureSensor_.setUnitOfMeasurement("°");
+
+    lightSensor_.setIcon("mdi:brightness-5");
+    lightSensor_.setName("Light");
+    lightSensor_.setUnitOfMeasurement("lux");
 
     hvacDevice_.setName("Heat Pump");
     hvacDevice_.setCurrentMode(HAHVAC::CoolMode);

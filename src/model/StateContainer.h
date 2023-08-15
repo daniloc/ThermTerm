@@ -7,7 +7,7 @@
 
 #include "utility/Observation.h"
 
-class StateContainer: public Subject<Observer, 5>
+class StateContainer : public Subject<Observer, 5>
 {
 public:
     // constructors
@@ -15,12 +15,13 @@ public:
 
     // getters
     StateData getState();
-    HvacFanMode getFanSpeed() {return stateData_.fanSpeed;};
+    HvacFanMode getFanSpeed() { return stateData_.fanSpeed; };
 
     // setters
     void setTemperature(float temperature);
     void setHumidity(float humidity);
     void setSetPoint(float setPoint);
+    void setLux(float lux);
     void setHVACMode(HvacMode hvacMode);
     void setFanSpeed(HvacFanMode fanSpeed);
     void turnOff();

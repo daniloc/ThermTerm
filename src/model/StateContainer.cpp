@@ -153,6 +153,14 @@ void StateContainer::setHumidity(float humidity)
     }
 }
 
+void StateContainer::setLux(float lux) {
+    if (lux != stateData_.lux) {
+        stateData_.lux = lux;
+        haInterface_.getLightSensor().setValue(lux);
+        Serial.print(F("Logging light update"));
+    }
+}
+
 void StateContainer::setSetPoint(float setPoint)
 {
     if (setPoint != stateData_.setPoint)
