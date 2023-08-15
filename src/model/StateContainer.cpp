@@ -203,9 +203,16 @@ void StateContainer::decrementSetPoint()
     setSetPoint(setPoint);
 }
 
-void StateContainer::turnOff() {
-    stateData_.power = OFF;
-    haInterface_.getHVACDevice().setMode(HAHVAC::Mode::OffMode);
+void StateContainer::togglePower() {
+
+    if (stateData_.power == ON) {
+        stateData_.power = OFF;
+        haInterface_.getHVACDevice().setMode(HAHVAC::Mode::OffMode);
+    } else {
+        stateData_.power = ON;
+        haInterface_.getHVACDevice().setMode(reverseConvertMode(stateData_.hvacMode));
+    }
+
     updateMitsubishiInterface();
     notifyObservers();
 }

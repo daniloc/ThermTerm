@@ -107,12 +107,11 @@ void StatusView::handleInputEvent(InputEvent event)
     state.setHVACMode(HVAC_HOT);
     break;
   case InputEvent::RotaryButton:
-    state.turnOff();
+    state.togglePower();
     break;
   default:
     break;
   }
-
 }
 
 void StatusView::objectDidChange()
@@ -120,7 +119,8 @@ void StatusView::objectDidChange()
   draw();
 }
 
-void StatusView::heartbeat() {
+void StatusView::heartbeat()
+{
   if (millis() - lastInputEventTime >= modalViewDuration)
   {
     // Dismiss the dial view

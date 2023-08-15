@@ -24,7 +24,7 @@ public:
     void setLux(float lux);
     void setHVACMode(HvacMode hvacMode);
     void setFanSpeed(HvacFanMode fanSpeed);
-    void turnOff();
+    void togglePower();
 
     void incrementSetPoint();
     void decrementSetPoint();
