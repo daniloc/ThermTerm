@@ -7,7 +7,7 @@ StateContainer *StateContainer::instance = nullptr; // Initialize static member
 
 MitsubishiInterface mitsubishiSend;
 
-float setPointStep = 0.25;
+float setPointStep = 1;
 
 void StateContainer::updateMitsubishiInterface()
 {
@@ -76,9 +76,12 @@ HvacFanMode convertFanMode(HAHVAC::FanMode haFanMode)
 
 void StateContainer::handleRemoteModeChange(HAHVAC::Mode newMode, HAHVAC *sender)
 {
-    if (newMode == HAHVAC::Mode::OffMode) {
+    if (newMode == HAHVAC::Mode::OffMode)
+    {
         stateData_.power = OFF;
-    } else {
+    }
+    else
+    {
         stateData_.hvacMode = convertMode(newMode);
         stateData_.power = ON;
     }
@@ -90,10 +93,13 @@ void StateContainer::handleRemoteModeChange(HAHVAC::Mode newMode, HAHVAC *sender
 
 void StateContainer::handleRemotePowerChange(bool powerState, HAHVAC *sender)
 {
-    if (powerState) {
+    if (powerState)
+    {
         stateData_.power = ON;
         haInterface_.getHVACDevice().setMode(sender->getCurrentMode());
-    } else {
+    }
+    else
+    {
         stateData_.power = OFF;
         haInterface_.getHVACDevice().setMode(HAHVAC::Mode::OffMode);
     }
@@ -153,8 +159,10 @@ void StateContainer::setHumidity(float humidity)
     }
 }
 
-void StateContainer::setLux(float lux) {
-    if (lux != stateData_.lux) {
+void StateContainer::setLux(float lux)
+{
+    if (lux != stateData_.lux)
+    {
         stateData_.lux = lux;
         haInterface_.getLightSensor().setValue(lux);
         Serial.print(F("Logging light update"));
@@ -175,18 +183,18 @@ void StateContainer::setSetPoint(float setPoint)
 void StateContainer::setHVACMode(HvacMode hvacMode)
 {
 
-        stateData_.hvacMode = hvacMode;
-        stateData_.power = ON;
-        haInterface_.getHVACDevice().setMode(reverseConvertMode(hvacMode));
-        updateMitsubishiInterface();
-        notifyObservers();
+    stateData_.hvacMode = hvacMode;
+    stateData_.power = ON;
+    haInterface_.getHVACDevice().setMode(reverseConvertMode(hvacMode));
+    updateMitsubishiInterface();
+    notifyObservers();
 }
 
 void StateContainer::setFanSpeed(HvacFanMode fanSpeed)
 {
 
-        stateData_.fanSpeed = fanSpeed;
-        updateMitsubishiInterface();
+    stateData_.fanSpeed = fanSpeed;
+    updateMitsubishiInterface();
 }
 
 void StateContainer::incrementSetPoint()
@@ -203,12 +211,16 @@ void StateContainer::decrementSetPoint()
     setSetPoint(setPoint);
 }
 
-void StateContainer::togglePower() {
+void StateContainer::togglePower()
+{
 
-    if (stateData_.power == ON) {
+    if (stateData_.power == ON)
+    {
         stateData_.power = OFF;
         haInterface_.getHVACDevice().setMode(HAHVAC::Mode::OffMode);
-    } else {
+    }
+    else
+    {
         stateData_.power = ON;
         haInterface_.getHVACDevice().setMode(reverseConvertMode(stateData_.hvacMode));
     }
@@ -222,7 +234,7 @@ void StateContainer::heartbeat()
     haInterface_.heartbeat();
 }
 
-//Static->Instance bridging
+// Static->Instance bridging
 void StateContainer::staticHandleRemotePowerChange(bool powerState, HAHVAC *sender)
 {
     if (instance)

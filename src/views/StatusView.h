@@ -4,6 +4,7 @@
 #include "BaseView.h"
 #include "model/StateContainer.h"
 #include "views/DialView.h"
+#include "SetPointView.h"
 
 #include <Adafruit_ST7789.h>
 
@@ -13,7 +14,8 @@ public:
     StatusView(Adafruit_ST7789 &tft, StateContainer &state)
         : BaseView(tft),
           state(state),
-          dialView_(tft, state, *this)
+          dialView_(tft, state, *this),
+          setPointView_(tft, state, *this)
     {
         state.registerObserver(this);
     }
@@ -25,6 +27,7 @@ public:
 private:
     StateContainer &state;
     DialView dialView_;
+    SetPointView setPointView_;
     void objectDidChange() override;
     unsigned long lastInputEventTime = 0;
 };

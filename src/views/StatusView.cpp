@@ -91,9 +91,11 @@ void StatusView::handleInputEvent(InputEvent event)
   switch (event)
   {
   case InputEvent::RotaryUp:
+    viewHierarchy.push(&setPointView_);
     state.incrementSetPoint();
     break;
   case InputEvent::RotaryDown:
+    viewHierarchy.push(&setPointView_);
     state.decrementSetPoint();
     break;
   case InputEvent::Button0:
@@ -123,8 +125,8 @@ void StatusView::heartbeat()
 {
   if (millis() - lastInputEventTime >= modalViewDuration)
   {
-    // Dismiss the dial view
-    if (!viewHierarchy.empty() && viewHierarchy.front() == &dialView_)
+    // Dismiss the modal view if needed
+    if (!viewHierarchy.empty())
     {
       viewHierarchy.pop();
       lastInputEventTime = millis(); // Reset the timer after dismissing the view
