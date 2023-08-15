@@ -17,6 +17,8 @@ public:
     StateData getState();
     HvacFanMode getFanSpeed() { return stateData_.fanSpeed; };
 
+    bool shouldDimScreen();
+
     // setters
     void setTemperature(float temperature);
     void setHumidity(float humidity);
@@ -48,6 +50,9 @@ private:
     StateData stateData_;
     void updateMitsubishiInterface();
     HAInterface haInterface_;
+
+    bool needsUpdate = false;
+    void checkInputUpdate();
 
     static StateContainer *instance; // static pointer to store instance of StateContainer
 };

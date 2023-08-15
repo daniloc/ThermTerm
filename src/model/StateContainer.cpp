@@ -3,11 +3,38 @@
 
 #include <functional>
 
+#define DIM_SCREEN_CUTOFF_LUX 15
+
 StateContainer *StateContainer::instance = nullptr; // Initialize static member
 
 MitsubishiInterface mitsubishiSend;
 
 float setPointStep = 1;
+
+bool StateContainer::shouldDimScreen()
+{
+    return stateData_.lux < DIM_SCREEN_CUTOFF_LUX;
+}
+
+void StateContainer::checkInputUpdate()
+{
+    static unsigned long timerStart = 0;
+    if (!needsUpdate)
+        return;
+
+    if (timerStart == 0)
+    {
+        timerStart = millis();
+        return;
+    }
+
+    if (millis() - timerStart >= 2000)
+    {
+        updateMitsubishiInterface();
+        needsUpdate = false;
+        timerStart = 0;
+    }
+}
 
 void StateContainer::updateMitsubishiInterface()
 {
@@ -175,7 +202,7 @@ void StateContainer::setSetPoint(float setPoint)
     {
         stateData_.setPoint = setPoint;
         haInterface_.getHVACDevice().setTargetTemperature(setPoint);
-        updateMitsubishiInterface();
+        needsUpdate = true;
         notifyObservers();
     }
 }
@@ -194,7 +221,7 @@ void StateContainer::setFanSpeed(HvacFanMode fanSpeed)
 {
 
     stateData_.fanSpeed = fanSpeed;
-    updateMitsubishiInterface();
+    needsUpdate = true;
 }
 
 void StateContainer::incrementSetPoint()
@@ -232,6 +259,8 @@ void StateContainer::togglePower()
 void StateContainer::heartbeat()
 {
     haInterface_.heartbeat();
+
+    checkInputUpdate();
 }
 
 // Static->Instance bridging
