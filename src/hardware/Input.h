@@ -3,6 +3,11 @@
 
 #include "utility/SingletonTemplate.h"
 
+#include "Adafruit_seesaw.h"
+#include "seesaw_neopixel.h"
+
+#define ENCODER_NEOPIXEL 6
+
 enum RotaryDirection
 {
     Unchanged,
@@ -31,6 +36,7 @@ public:
     void heartbeat();
     void setCallback(InputHandlingCallback callback);
     void processInput(InputEvent input);
+    seesaw_NeoPixel* getNeoPixel() { return &encoderPixel_; };
 
 private:
     bool readRotaryButton();
@@ -40,6 +46,8 @@ private:
     void handleRotaryDown();
 
     static InputHandlingCallback inputHandlingCallback;
+    Adafruit_seesaw rotaryEncoder;
+    seesaw_NeoPixel encoderPixel_ = seesaw_NeoPixel(1, ENCODER_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 };
 
 #endif // SRC_HARDWARE_INPUT

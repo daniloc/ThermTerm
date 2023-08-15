@@ -1,18 +1,12 @@
 #include "Input.h"
-#include "Adafruit_seesaw.h"
-#include "seesaw_neopixel.h"
 
 #include <queue>
 
 std::queue<InputEvent> eventQueue;
 
 #define ENCODER_SWITCH 24
-#define ENCODER_NEOPIXEL 6
-
 #define SEESAW_ADDR 0x36
 
-Adafruit_seesaw rotaryEncoder;
-seesaw_NeoPixel encoderPixel = seesaw_NeoPixel(1, ENCODER_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 int32_t encoder_position;
 
 InputHandlingCallback Input::inputHandlingCallback = nullptr;
@@ -30,8 +24,6 @@ volatile unsigned long lastInterruptTime0 = 0;
 volatile unsigned long lastInterruptTime1 = 0;
 volatile unsigned long lastInterruptTime2 = 0;
 unsigned long debounceTime = 500; // Debounce time in milliseconds
-
-
 
 void handleButton0Press()
 {
@@ -61,25 +53,6 @@ void handleButton2Press()
         eventQueue.push(InputEvent::Button2);
     }
     lastInterruptTime2 = millis();
-}
-
-uint32_t Wheel(byte WheelPos)
-{
-    if (WheelPos < 85)
-    {
-        return seesaw_NeoPixel::Color(WheelPos * 3, 255 - WheelPos * 3, 0);
-    }
-    else if (WheelPos < 170)
-    {
-        WheelPos -= 85;
-        return seesaw_NeoPixel::Color(255 - WheelPos * 3, 0, WheelPos * 3);
-    }
-    else
-    {
-        WheelPos -= 170;
-        return seesaw_NeoPixel::Color(0, WheelPos * 3, 255 - WheelPos * 3);
-    }
-    return 0;
 }
 
 // *** Input Handlers
@@ -190,8 +163,6 @@ RotaryDirection Input::readRotaryPosition()
         Serial.println(new_position); // display new position
 
         // change the neopixel color
-        encoderPixel.setPixelColor(0, Wheel(new_position & 0xFF));
-        encoderPixel.show();
 
         if (new_position < encoder_position)
         {
@@ -221,31 +192,27 @@ void Input::configure()
 
     //***Rotary Encoder***
 
-    Serial.println("Looking for seesaw!");
+    Serial.print("Looking for seesaw!");
 
-    if (!rotaryEncoder.begin(SEESAW_ADDR) || !encoderPixel.begin(SEESAW_ADDR))
+    if (!rotaryEncoder.begin(SEESAW_ADDR) || !encoderPixel_.begin(SEESAW_ADDR))
     {
-        Serial.println("Couldn't find seesaw on default address");
+        Serial.print("Couldn't find seesaw on default address");
     }
     else
     {
-        Serial.println("seesaw started");
+        Serial.print("seesaw started");
     }
 
     uint32_t version = ((rotaryEncoder.getVersion() >> 16) & 0xFFFF);
     if (version != 4991)
     {
         Serial.print("Wrong firmware loaded? ");
-        Serial.println(version);
+        Serial.print(version);
     }
     else
     {
-        Serial.println("Found Product 4991");
+        Serial.print("Found Product 4991");
     }
-
-    // set not so bright!
-    encoderPixel.setBrightness(20);
-    encoderPixel.show();
 
     // get starting position
     encoder_position = rotaryEncoder.getEncoderPosition();

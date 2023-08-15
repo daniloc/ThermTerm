@@ -25,19 +25,32 @@ void StatusView::draw()
   if (stateData.power == OFF)
   {
     tempMeterColor = ST77XX_WHITE;
+    Input::shared().getNeoPixel()->clear();
   }
   else if (stateData.hvacMode == HVAC_HOT)
   { // heat
     tempMeterColor = ST77XX_RED;
+    
+    Input::shared().getNeoPixel()->setPixelColor(0, 255, 0, 0);
   }
   else if (stateData.hvacMode == HVAC_COLD)
   { // cool
     tempMeterColor = ST77XX_BLUE;
+    Input::shared().getNeoPixel()->setPixelColor(0, 0, 0, 255);
   }
   else
   { // other modes
     tempMeterColor = ST77XX_WHITE;
+    Input::shared().getNeoPixel()->setPixelColor(0, 100, 100, 100);
   }
+
+  if (state.shouldDimScreen()) {
+    Input::shared().getNeoPixel()->clear();
+  } else {
+    Input::shared().getNeoPixel()->setBrightness(40);
+  }
+
+  Input::shared().getNeoPixel()->show();
 
   tft.setTextColor(tempMeterColor, ST77XX_BLACK);
 
