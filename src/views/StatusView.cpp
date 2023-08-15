@@ -69,7 +69,7 @@ void StatusView::draw()
   tft.print("COOL");
 
   tft.setCursor(0, (height / 2) - 10);
-  tft.print("OFF");
+  tft.print("SET FAN");
 
   tft.setCursor(0, height - 20);
   tft.print("HEAT");
@@ -100,14 +100,15 @@ void StatusView::handleInputEvent(InputEvent event)
     state.setHVACMode(HVAC_COLD);
     break;
   case InputEvent::Button1:
-    state.turnOff();
+    viewHierarchy.push(&dialView_);
+    draw();
     break;
   case InputEvent::Button2:
     state.setHVACMode(HVAC_HOT);
     break;
   case InputEvent::RotaryButton:
-    viewHierarchy.push(&dialView_);
-    draw();
+    state.turnOff();
+    break;
   default:
     break;
   }
