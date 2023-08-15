@@ -48,11 +48,11 @@ public:
 
 private:
     StateData stateData_;
-    void updateMitsubishiInterface();
+    void sendInfraredCommand();
     HAInterface haInterface_;
 
     bool needsUpdate = false;
-    void checkInputUpdate();
+    void checkInputBatching();
 
     static StateContainer *instance; // static pointer to store instance of StateContainer
 };

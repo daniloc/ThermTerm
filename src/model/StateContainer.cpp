@@ -16,7 +16,7 @@ bool StateContainer::shouldDimScreen()
     return stateData_.lux < DIM_SCREEN_CUTOFF_LUX;
 }
 
-void StateContainer::checkInputUpdate()
+void StateContainer::checkInputBatching()
 {
     static unsigned long timerStart = 0;
     if (!needsUpdate)
@@ -30,13 +30,13 @@ void StateContainer::checkInputUpdate()
 
     if (millis() - timerStart >= 2000)
     {
-        updateMitsubishiInterface();
+        sendInfraredCommand();
         needsUpdate = false;
         timerStart = 0;
     }
 }
 
-void StateContainer::updateMitsubishiInterface()
+void StateContainer::sendInfraredCommand()
 {
     mitsubishiSend.sendHvacMitsubishi(stateData_.hvacMode, stateData_.heatPumpSetPoint(), stateData_.fanSpeed, HvacVanneMode::VANNE_AUTO, stateData_.power);
 }
@@ -114,7 +114,7 @@ void StateContainer::handleRemoteModeChange(HAHVAC::Mode newMode, HAHVAC *sender
     }
 
     sender->setMode(newMode);
-    updateMitsubishiInterface();
+    sendInfraredCommand();
     notifyObservers();
 }
 
@@ -131,7 +131,7 @@ void StateContainer::handleRemotePowerChange(bool powerState, HAHVAC *sender)
         haInterface_.getHVACDevice().setMode(HAHVAC::Mode::OffMode);
     }
 
-    updateMitsubishiInterface();
+    sendInfraredCommand();
     notifyObservers();
 }
 
@@ -141,7 +141,7 @@ void StateContainer::handleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *
     stateData_.fanSpeed = convertFanMode(fanMode);
     stateData_.power = ON;
     sender->setFanMode(fanMode);
-    updateMitsubishiInterface();
+    sendInfraredCommand();
     notifyObservers();
 }
 
@@ -213,7 +213,7 @@ void StateContainer::setHVACMode(HvacMode hvacMode)
     stateData_.hvacMode = hvacMode;
     stateData_.power = ON;
     haInterface_.getHVACDevice().setMode(reverseConvertMode(hvacMode));
-    updateMitsubishiInterface();
+    sendInfraredCommand();
     notifyObservers();
 }
 
@@ -252,7 +252,7 @@ void StateContainer::togglePower()
         haInterface_.getHVACDevice().setMode(reverseConvertMode(stateData_.hvacMode));
     }
 
-    updateMitsubishiInterface();
+    sendInfraredCommand();
     notifyObservers();
 }
 
@@ -260,7 +260,7 @@ void StateContainer::heartbeat()
 {
     haInterface_.heartbeat();
 
-    checkInputUpdate();
+    checkInputBatching();
 }
 
 // Static->Instance bridging
