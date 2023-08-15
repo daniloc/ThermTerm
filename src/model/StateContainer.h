@@ -53,6 +53,8 @@ private:
 
     bool needsUpdate = false;
     void checkInputBatching();
+    void scheduleUpdate();
+    unsigned long batchScheduleTime = 0;
 
     static StateContainer *instance; // static pointer to store instance of StateContainer
 };

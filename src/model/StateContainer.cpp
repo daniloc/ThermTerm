@@ -16,23 +16,27 @@ bool StateContainer::shouldDimScreen()
     return stateData_.lux < DIM_SCREEN_CUTOFF_LUX;
 }
 
+void StateContainer::scheduleUpdate() {
+    needsUpdate = true;
+    batchScheduleTime = 0;
+}
+
 void StateContainer::checkInputBatching()
 {
-    static unsigned long timerStart = 0;
     if (!needsUpdate)
         return;
 
-    if (timerStart == 0)
+    if (batchScheduleTime == 0)
     {
-        timerStart = millis();
+        batchScheduleTime = millis();
         return;
     }
 
-    if (millis() - timerStart >= 2000)
+    if (millis() - batchScheduleTime >= 2000)
     {
         sendInfraredCommand();
         needsUpdate = false;
-        timerStart = 0;
+        batchScheduleTime = 0;
     }
 }
 
@@ -202,7 +206,7 @@ void StateContainer::setSetPoint(float setPoint)
     {
         stateData_.setPoint = setPoint;
         haInterface_.getHVACDevice().setTargetTemperature(setPoint);
-        needsUpdate = true;
+        scheduleUpdate();
         notifyObservers();
     }
 }
@@ -221,7 +225,7 @@ void StateContainer::setFanSpeed(HvacFanMode fanSpeed)
 {
 
     stateData_.fanSpeed = fanSpeed;
-    needsUpdate = true;
+    scheduleUpdate();
 }
 
 void StateContainer::incrementSetPoint()
