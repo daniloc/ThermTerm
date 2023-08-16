@@ -9,6 +9,7 @@ HAInterface::HAInterface() : macAddress_(generateMacAddress()),
                              temperatureSensor_("temperature"),
                              humiditySensor_("relative-humidity"),
                              lightSensor_("light-intensity"),
+                             alertTrigger_("alert-trigger"),
                              hvacDevice_(
                                  "heat-pump",
                                  HAHVAC::TargetTemperatureFeature |
@@ -34,6 +35,8 @@ void HAInterface::configure(bool useCelsius)
     lightSensor_.setIcon("mdi:brightness-5");
     lightSensor_.setName("Light");
     lightSensor_.setUnitOfMeasurement("lux");
+
+    alertTrigger_.setName("Alert");
 
     hvacDevice_.setName("Heat Pump");
     hvacDevice_.setCurrentMode(HAHVAC::CoolMode);

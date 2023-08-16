@@ -45,6 +45,7 @@ public:
     static void staticHandleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *sender);
     static void staticHandleRemoteTargetTemperatureChange(HANumeric temperature, HAHVAC *sender);
     static void staticHandleRemoteModeChange(HAHVAC::Mode, HAHVAC *);
+    static void staticHandleAlert(bool status, HASwitch *sender);
 
 private:
     StateData stateData_;

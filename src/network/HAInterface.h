@@ -23,6 +23,7 @@ public:
     HASensorNumber &getHumiditySensor() { return humiditySensor_; }
     HASensorNumber &getTemperatureSensor() { return temperatureSensor_; }
     HASensorNumber &getLightSensor() { return lightSensor_; }
+    HASwitch &getAlertTrigger() { return alertTrigger_; }
     HAHVAC &getHVACDevice() { return hvacDevice_; }
 
 private:
@@ -32,6 +33,7 @@ private:
     HASensorNumber humiditySensor_;
     HASensorNumber temperatureSensor_;
     HASensorNumber lightSensor_;
+    HASwitch alertTrigger_;
     HAHVAC hvacDevice_;
 };
 

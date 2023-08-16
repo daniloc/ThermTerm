@@ -3,7 +3,7 @@
 
 #include <functional>
 
-#define DIM_SCREEN_CUTOFF_LUX 15
+#define DIM_SCREEN_CUTOFF_LUX 5
 
 StateContainer *StateContainer::instance = nullptr; // Initialize static member
 
@@ -164,7 +164,10 @@ void StateContainer::configure()
     haInterface_.getHVACDevice().onPowerCommand(StateContainer::staticHandleRemotePowerChange);
     haInterface_.getHVACDevice().onFanModeCommand(StateContainer::staticHandleRemoteFanModeChange);
     haInterface_.getHVACDevice().onTargetTemperatureCommand(StateContainer::staticHandleRemoteTargetTemperatureChange);
+
+    haInterface_.getAlertTrigger().onCommand(StateContainer::staticHandleAlert);
 }
+
 
 // getters
 StateData StateContainer::getState() { return stateData_; };
@@ -297,4 +300,9 @@ void StateContainer::staticHandleRemoteModeChange(HAHVAC::Mode mode, HAHVAC *sen
     {
         instance->handleRemoteModeChange(mode, sender);
     }
+}
+
+void StateContainer::staticHandleAlert(bool status, HASwitch *sender) {
+    Serial.print("switch changed");
+    sender->setState(status);
 }
