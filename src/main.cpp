@@ -7,19 +7,22 @@
 #include "hardware/EnvSensor.h"
 #include "hardware/Audio.h"
 #include "hardware/Input.h"
+#include "hardware/infrared/MitsubishiInterface.h"
 
 #include "views/StatusView.h"
-#include "model/StateContainer.h"
+#include "SystemController.h"
 
 #include "hardware/WifiInterface.h"
 #include <WiFi.h>
 
-StateContainer state;
+MitsubishiInterface mitsubishiInterface; // Create alternative IR schemes by sublassing IRInterface
+SystemController controller(mitsubishiInterface);
+
 EnvSensor sensor = EnvSensor();
 Input &input = Input::shared();
 
 Adafruit_ST7789 &tft = Display::shared().configure();
-StatusView statusView(tft, state);
+StatusView statusView(tft, controller);
 BaseView &activeView = statusView;
 
 void handleInput(InputEvent event)
@@ -31,17 +34,17 @@ void handleInput(InputEvent event)
 void updateEnvironmentData(float temp, float humidity, float lux)
 {
 
-  if (temp != state.getState().temperature ||
-      humidity != state.getState().humidity ||
-      lux != state.getState().lux)
+  if (temp != controller.getState().temperature ||
+      humidity != controller.getState().humidity ||
+      lux != controller.getState().lux)
   {
-    state.setHumidity(humidity);
-    state.setTemperature(temp);
-    state.setLux(lux);
+    controller.setHumidity(humidity);
+    controller.setTemperature(temp);
+    controller.setLux(lux);
     statusView.draw();
   }
 
-  if (state.shouldDimScreen())
+  if (controller.shouldDimScreen())
   {
     Display::shared().dimScreen();
   }
@@ -66,13 +69,13 @@ void setup(void)
   Audio::configure();
 
   WifiInterface::shared().configure();
-  state.configure();
+  controller.configure();
 }
 
 void loop()
 {
   sensor.heartbeat();
   input.heartbeat();
-  state.heartbeat();
+  controller.heartbeat();
   statusView.heartbeat();
 }

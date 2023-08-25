@@ -2,15 +2,15 @@
 #define SRC_VIEWS_DIALVIEW_20COPY
 
 #include "BaseView.h"
-#include "model/StateContainer.h"
+#include "SystemController.h"
 
 class SetPointView : public BaseView
 {
 public:
     SetPointView(Adafruit_ST7789 &tft,
-                 StateContainer &state,
+                 SystemController &controller,
                  BaseView &superview) : BaseView(tft),
-                                        state_(state),
+                                        controller_(controller),
                                         superview_(superview)
     {
     }
@@ -19,7 +19,7 @@ public:
     void handleInputEvent(InputEvent event) override;
 
 private:
-    StateContainer &state_;
+    SystemController &controller_;
     BaseView &superview_;
     void objectDidChange() override;
 };

@@ -1,9 +1,18 @@
 #ifndef SRC_MODEL_STATEDATA
 #define SRC_MODEL_STATEDATA
 
-#include "hardware/MitsubishiInterface.h"
+#include "StateFields.h"
 
-struct StateData
+struct HVACCommand
+{
+    HvacMode hvacMode;
+    int setPoint;
+    HvacFanMode fanMode;
+    HvacVaneMode vaneMode;
+    HvacPower power;
+};
+
+struct SystemState
 {
     float temperature = 0.0;
     float humidity = 0.0;
@@ -25,6 +34,17 @@ struct StateData
         {
             return int((setPoint - 32) * 5.0 / 9.0);
         }
+    }
+
+    HVACCommand hvacCommand() const
+    {
+        HVACCommand command;
+        command.hvacMode = hvacMode;
+        command.setPoint = setPoint;
+        command.fanMode = fanSpeed;
+        command.vaneMode = VANE_AUTO;
+        command.power = power;
+        return command;
     }
 };
 

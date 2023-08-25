@@ -2,7 +2,7 @@
 #define SRC_VIEWS_STATUSVIEW
 
 #include "BaseView.h"
-#include "model/StateContainer.h"
+#include "SystemController.h"
 #include "views/DialView.h"
 #include "SetPointView.h"
 
@@ -11,13 +11,13 @@
 class StatusView : public BaseView
 {
 public:
-    StatusView(Adafruit_ST7789 &tft, StateContainer &state)
+    StatusView(Adafruit_ST7789 &tft, SystemController &controller)
         : BaseView(tft),
-          state(state),
-          dialView_(tft, state, *this),
-          setPointView_(tft, state, *this)
+          controller_(controller),
+          dialView_(tft, controller, *this),
+          setPointView_(tft, controller, *this)
     {
-        state.registerObserver(this);
+        controller.registerObserver(this);
     }
 
     void draw() override;
@@ -25,7 +25,7 @@ public:
     void heartbeat();
 
 private:
-    StateContainer &state;
+    SystemController &controller_;
     DialView dialView_;
     SetPointView setPointView_;
     void objectDidChange() override;

@@ -1,29 +1,32 @@
-#include "hardware/MitsubishiInterface.h"
+#include "hardware/infrared/MitsubishiInterface.h"
 #include "hardware/Audio.h"
-#include "StateContainer.h"
+#include "SystemController.h"
+#include "_Constants.h"
 
 #include <functional>
 
-#define DIM_SCREEN_CUTOFF_LUX 1
-
-StateContainer *StateContainer::instance = nullptr; // Initialize static member
-
-MitsubishiInterface mitsubishiSend;
+SystemController *SystemController::instance = nullptr; // Initialize static member
 
 float setPointStep = 1;
 
-bool StateContainer::shouldDimScreen()
+SystemController::SystemController(IRInterface &irInterface) : haInterface_(HAInterface()),
+                                                           irInterface_(irInterface)
 {
-    return stateData_.lux < DIM_SCREEN_CUTOFF_LUX;
+    instance = this;
 }
 
-void StateContainer::scheduleUpdate()
+bool SystemController::shouldDimScreen()
+{
+    return state_.lux < DIM_SCREEN_CUTOFF_LUX;
+}
+
+void SystemController::scheduleUpdate()
 {
     needsUpdate = true;
     batchScheduleTime = 0;
 }
 
-void StateContainer::checkInputBatching()
+void SystemController::checkInputBatching()
 {
     if (!needsUpdate)
         return;
@@ -42,14 +45,9 @@ void StateContainer::checkInputBatching()
     }
 }
 
-void StateContainer::sendInfraredCommand()
+void SystemController::sendInfraredCommand()
 {
-    mitsubishiSend.sendHvacMitsubishi(stateData_.hvacMode, stateData_.heatPumpSetPoint(), stateData_.fanSpeed, HvacVanneMode::VANNE_AUTO, stateData_.power);
-}
-
-StateContainer::StateContainer() : haInterface_(HAInterface())
-{
-    instance = this;
+    irInterface_.sendCommand(state_.hvacCommand());
 }
 
 HvacMode convertMode(HAHVAC::Mode mode)
@@ -107,16 +105,16 @@ HvacFanMode convertFanMode(HAHVAC::FanMode haFanMode)
     }
 }
 
-void StateContainer::handleRemoteModeChange(HAHVAC::Mode newMode, HAHVAC *sender)
+void SystemController::handleRemoteModeChange(HAHVAC::Mode newMode, HAHVAC *sender)
 {
     if (newMode == HAHVAC::Mode::OffMode)
     {
-        stateData_.power = OFF;
+        state_.power = OFF;
     }
     else
     {
-        stateData_.hvacMode = convertMode(newMode);
-        stateData_.power = ON;
+        state_.hvacMode = convertMode(newMode);
+        state_.power = ON;
     }
 
     sender->setMode(newMode);
@@ -124,16 +122,16 @@ void StateContainer::handleRemoteModeChange(HAHVAC::Mode newMode, HAHVAC *sender
     notifyObservers();
 }
 
-void StateContainer::handleRemotePowerChange(bool powerState, HAHVAC *sender)
+void SystemController::handleRemotePowerChange(bool powerState, HAHVAC *sender)
 {
     if (powerState)
     {
-        stateData_.power = ON;
+        state_.power = ON;
         haInterface_.getHVACDevice().setMode(sender->getCurrentMode());
     }
     else
     {
-        stateData_.power = OFF;
+        state_.power = OFF;
         haInterface_.getHVACDevice().setMode(HAHVAC::Mode::OffMode);
     }
 
@@ -141,132 +139,132 @@ void StateContainer::handleRemotePowerChange(bool powerState, HAHVAC *sender)
     notifyObservers();
 }
 
-void StateContainer::handleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *sender)
+void SystemController::handleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *sender)
 {
     Serial.print("updating fan mode" + String(fanMode));
-    stateData_.fanSpeed = convertFanMode(fanMode);
-    stateData_.power = ON;
+    state_.fanSpeed = convertFanMode(fanMode);
+    state_.power = ON;
     sender->setFanMode(fanMode);
     sendInfraredCommand();
     notifyObservers();
 }
 
-void StateContainer::handleRemoteTargetTemperatureChange(HANumeric temperature, HAHVAC *sender)
+void SystemController::handleRemoteTargetTemperatureChange(HANumeric temperature, HAHVAC *sender)
 {
     Serial.print("receiving remote temperature change");
     setSetPoint(temperature.toFloat());
 }
 
-void StateContainer::configure()
+void SystemController::configure()
 {
-    mitsubishiSend.prepare();
-    haInterface_.configure(stateData_.celsius);
+    irInterface_.configure();
+    haInterface_.configure(state_.celsius);
 
-    haInterface_.getHVACDevice().onModeCommand(&StateContainer::staticHandleRemoteModeChange);
-    haInterface_.getHVACDevice().onPowerCommand(StateContainer::staticHandleRemotePowerChange);
-    haInterface_.getHVACDevice().onFanModeCommand(StateContainer::staticHandleRemoteFanModeChange);
-    haInterface_.getHVACDevice().onTargetTemperatureCommand(StateContainer::staticHandleRemoteTargetTemperatureChange);
+    haInterface_.getHVACDevice().onModeCommand(&SystemController::staticHandleRemoteModeChange);
+    haInterface_.getHVACDevice().onPowerCommand(SystemController::staticHandleRemotePowerChange);
+    haInterface_.getHVACDevice().onFanModeCommand(SystemController::staticHandleRemoteFanModeChange);
+    haInterface_.getHVACDevice().onTargetTemperatureCommand(SystemController::staticHandleRemoteTargetTemperatureChange);
 
-    haInterface_.getAlertTrigger().onCommand(StateContainer::staticHandleAlert);
+    haInterface_.getAlertTrigger().onCommand(SystemController::staticHandleAlert);
 }
 
 // getters
-StateData StateContainer::getState() { return stateData_; };
+SystemState SystemController::getState() { return state_; };
 
 // setters
-void StateContainer::setTemperature(float temperature)
+void SystemController::setTemperature(float temperature)
 {
-    if (temperature != stateData_.temperature)
+    if (temperature != state_.temperature)
     {
-        stateData_.temperature = temperature;
+        state_.temperature = temperature;
         haInterface_.getTemperatureSensor().setValue(temperature);
         Serial.print(F("logging temp update"));
     }
 }
 
-void StateContainer::setHumidity(float humidity)
+void SystemController::setHumidity(float humidity)
 {
-    if (humidity != stateData_.humidity)
+    if (humidity != state_.humidity)
     {
-        stateData_.humidity = humidity;
+        state_.humidity = humidity;
         haInterface_.getHumiditySensor().setValue(humidity);
         Serial.print(F("logging humidity update"));
     }
 }
 
-void StateContainer::setLux(float lux)
+void SystemController::setLux(float lux)
 {
-    if (lux != stateData_.lux)
+    if (lux != state_.lux)
     {
-        stateData_.lux = lux;
+        state_.lux = lux;
         haInterface_.getLightSensor().setValue(lux);
         Serial.print(F("Logging light update"));
     }
 }
 
-void StateContainer::setSetPoint(float setPoint)
+void SystemController::setSetPoint(float setPoint)
 {
-    if (setPoint != stateData_.setPoint)
+    if (setPoint != state_.setPoint)
     {
-        stateData_.setPoint = setPoint;
+        state_.setPoint = setPoint;
         haInterface_.getHVACDevice().setTargetTemperature(setPoint);
         scheduleUpdate();
         notifyObservers();
     }
 }
 
-void StateContainer::setHVACMode(HvacMode hvacMode)
+void SystemController::setHVACMode(HvacMode hvacMode)
 {
 
-    stateData_.hvacMode = hvacMode;
-    stateData_.power = ON;
+    state_.hvacMode = hvacMode;
+    state_.power = ON;
     haInterface_.getHVACDevice().setMode(reverseConvertMode(hvacMode));
     sendInfraredCommand();
     notifyObservers();
 }
 
-void StateContainer::setFanSpeed(HvacFanMode fanSpeed)
+void SystemController::setFanSpeed(HvacFanMode fanSpeed)
 {
 
-    stateData_.fanSpeed = fanSpeed;
+    state_.fanSpeed = fanSpeed;
     scheduleUpdate();
 }
 
-void StateContainer::incrementSetPoint()
+void SystemController::incrementSetPoint()
 {
-    float setPoint = stateData_.setPoint;
+    float setPoint = state_.setPoint;
     setPoint += setPointStep;
     setSetPoint(setPoint);
     Audio::play_UpwardTone();
 }
 
-void StateContainer::decrementSetPoint()
+void SystemController::decrementSetPoint()
 {
-    float setPoint = stateData_.setPoint;
+    float setPoint = state_.setPoint;
     setPoint -= setPointStep;
     setSetPoint(setPoint);
     Audio::play_DownwardTone();
 }
 
-void StateContainer::togglePower()
+void SystemController::togglePower()
 {
 
-    if (stateData_.power == ON)
+    if (state_.power == ON)
     {
-        stateData_.power = OFF;
+        state_.power = OFF;
         haInterface_.getHVACDevice().setMode(HAHVAC::Mode::OffMode);
     }
     else
     {
-        stateData_.power = ON;
-        haInterface_.getHVACDevice().setMode(reverseConvertMode(stateData_.hvacMode));
+        state_.power = ON;
+        haInterface_.getHVACDevice().setMode(reverseConvertMode(state_.hvacMode));
     }
 
     sendInfraredCommand();
     notifyObservers();
 }
 
-void StateContainer::heartbeat()
+void SystemController::heartbeat()
 {
     haInterface_.heartbeat();
 
@@ -274,7 +272,7 @@ void StateContainer::heartbeat()
 }
 
 // Static->Instance bridging
-void StateContainer::staticHandleRemotePowerChange(bool powerState, HAHVAC *sender)
+void SystemController::staticHandleRemotePowerChange(bool powerState, HAHVAC *sender)
 {
     if (instance)
     {
@@ -282,7 +280,7 @@ void StateContainer::staticHandleRemotePowerChange(bool powerState, HAHVAC *send
     }
 }
 
-void StateContainer::staticHandleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *sender)
+void SystemController::staticHandleRemoteFanModeChange(HAHVAC::FanMode fanMode, HAHVAC *sender)
 {
     if (instance)
     {
@@ -290,14 +288,14 @@ void StateContainer::staticHandleRemoteFanModeChange(HAHVAC::FanMode fanMode, HA
     }
 }
 
-void StateContainer::staticHandleRemoteTargetTemperatureChange(HANumeric temperature, HAHVAC *sender)
+void SystemController::staticHandleRemoteTargetTemperatureChange(HANumeric temperature, HAHVAC *sender)
 {
     if (instance)
     {
         instance->handleRemoteTargetTemperatureChange(temperature, sender);
     }
 }
-void StateContainer::staticHandleRemoteModeChange(HAHVAC::Mode mode, HAHVAC *sender)
+void SystemController::staticHandleRemoteModeChange(HAHVAC::Mode mode, HAHVAC *sender)
 {
     if (instance)
     {
@@ -305,7 +303,7 @@ void StateContainer::staticHandleRemoteModeChange(HAHVAC::Mode mode, HAHVAC *sen
     }
 }
 
-void StateContainer::staticHandleAlert(bool status, HASwitch *sender)
+void SystemController::staticHandleAlert(bool status, HASwitch *sender)
 {
     Serial.print("switch changed");
     sender->setState(status);

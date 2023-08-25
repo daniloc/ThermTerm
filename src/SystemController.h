@@ -1,21 +1,21 @@
-#ifndef SRC_MODEL_STATECONTAINER
-#define SRC_MODEL_STATECONTAINER
+#ifndef SRC_SYSTEMCONTROLLER
+#define SRC_SYSTEMCONTROLLER
 
 #include "utility/SingletonTemplate.h"
-#include "model/StateData.h"
+#include "model/SystemState.h"
 #include "network/HAInterface.h"
-
 #include "utility/Observation.h"
+#include "hardware/infrared/IRInterface.h"
 
-class StateContainer : public Subject<Observer, 5>
+class SystemController : public Subject<Observer, 5>
 {
 public:
     // constructors
-    StateContainer();
+    SystemController(IRInterface &);
 
     // getters
-    StateData getState();
-    HvacFanMode getFanSpeed() { return stateData_.fanSpeed; };
+    SystemState getState();
+    HvacFanMode getFanSpeed() { return state_.fanSpeed; };
 
     bool shouldDimScreen();
 
@@ -48,16 +48,17 @@ public:
     static void staticHandleAlert(bool status, HASwitch *sender);
 
 private:
-    StateData stateData_;
+    SystemState state_;
     void sendInfraredCommand();
     HAInterface haInterface_;
+    IRInterface &irInterface_;
 
     bool needsUpdate = false;
     void checkInputBatching();
     void scheduleUpdate();
     unsigned long batchScheduleTime = 0;
 
-    static StateContainer *instance; // static pointer to store instance of StateContainer
+    static SystemController *instance; // static pointer to store instance of SystemController
 };
 
-#endif // SRC_MODEL_STATECONTAINER
+#endif // SRC_SYSTEMCONTROLLER

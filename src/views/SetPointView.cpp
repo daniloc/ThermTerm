@@ -10,7 +10,7 @@ void SetPointView::draw()
     tft.setTextSize(4);
     tft.setCursor(0, 0);
 
-    switch (state_.getState().hvacMode)
+    switch (controller_.getState().hvacMode)
     {
     case HvacMode::HVAC_HOT:
         tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
@@ -27,7 +27,7 @@ void SetPointView::draw()
 
     tft.setCursor(0, 60);                                // set cursor position, adjust as necessary
     tft.setTextSize(7);                                  // set text size, adjust as necessary
-    tft.print(String(int(state_.getState().setPoint))); // print the string
+    tft.print(String(int(controller_.getState().setPoint))); // print the string
 }
 
 void SetPointView::handleInputEvent(InputEvent event)
@@ -35,11 +35,11 @@ void SetPointView::handleInputEvent(InputEvent event)
     switch (event)
     {
     case InputEvent::RotaryUp:
-        state_.incrementSetPoint();
+        controller_.incrementSetPoint();
          break;
 
     case InputEvent::RotaryDown:
-         state_.decrementSetPoint();
+         controller_.decrementSetPoint();
          break;
 
     case InputEvent::RotaryButton:

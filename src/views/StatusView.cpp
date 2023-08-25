@@ -15,7 +15,7 @@ void StatusView::draw()
   }
 
   // retrieve values from state
-  StateData stateData = state.getState();
+  SystemState stateData = controller_.getState();
 
   // populate text based on state values
   // (you'll need to convert the floats to strings)
@@ -44,7 +44,7 @@ void StatusView::draw()
     Input::shared().getNeoPixel()->setPixelColor(0, 100, 100, 100);
   }
 
-  if (state.shouldDimScreen()) {
+  if (controller_.shouldDimScreen()) {
     Input::shared().getNeoPixel()->clear();
   } else {
     Input::shared().getNeoPixel()->setBrightness(40);
@@ -105,24 +105,24 @@ void StatusView::handleInputEvent(InputEvent event)
   {
   case InputEvent::RotaryUp:
     viewHierarchy.push(&setPointView_);
-    state.incrementSetPoint();
+    controller_.incrementSetPoint();
     break;
   case InputEvent::RotaryDown:
     viewHierarchy.push(&setPointView_);
-    state.decrementSetPoint();
+    controller_.decrementSetPoint();
     break;
   case InputEvent::Button0:
-    state.setHVACMode(HVAC_COLD);
+    controller_.setHVACMode(HVAC_COLD);
     break;
   case InputEvent::Button1:
     viewHierarchy.push(&dialView_);
     draw();
     break;
   case InputEvent::Button2:
-    state.setHVACMode(HVAC_HOT);
+    controller_.setHVACMode(HVAC_HOT);
     break;
   case InputEvent::RotaryButton:
-    state.togglePower();
+    controller_.togglePower();
     break;
   default:
     break;

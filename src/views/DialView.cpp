@@ -14,7 +14,7 @@ void DialView::draw() {
     tft.print("Fan Mode");
 
     String output;
-    switch (state_.getFanSpeed())
+    switch (controller_.getFanSpeed())
     {
     case FAN_SPEED_1:
         output = "*";
@@ -51,29 +51,29 @@ void DialView::handleInputEvent(InputEvent event)
     {
     case InputEvent::RotaryUp:
         // Handle increase in fan mode
-        if (state_.getFanSpeed() >= FAN_SPEED_SILENT)
+        if (controller_.getFanSpeed() >= FAN_SPEED_SILENT)
         {
             // If fan mode is at the maximum, loop around to the minimum
-            state_.setFanSpeed(FAN_SPEED_1);
+            controller_.setFanSpeed(FAN_SPEED_1);
         }
         else
         {
             // Otherwise, just increment the fan mode
-            state_.setFanSpeed((HvacFanMode)(state_.getFanSpeed() + 1));
+            controller_.setFanSpeed((HvacFanMode)(controller_.getFanSpeed() + 1));
         }
         break;
 
     case InputEvent::RotaryDown:
         // Handle decrease in fan mode
-        if (state_.getFanSpeed() <= FAN_SPEED_1)
+        if (controller_.getFanSpeed() <= FAN_SPEED_1)
         {
             // If fan mode is at the minimum, loop around to the maximum
-            state_.setFanSpeed(FAN_SPEED_SILENT);
+            controller_.setFanSpeed(FAN_SPEED_SILENT);
         }
         else
         {
             // Otherwise, just decrement the fan mode
-            state_.setFanSpeed((HvacFanMode)(state_.getFanSpeed() - 1));
+            controller_.setFanSpeed((HvacFanMode)(controller_.getFanSpeed() - 1));
         }
         break;
 
