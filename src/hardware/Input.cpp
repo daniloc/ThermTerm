@@ -158,7 +158,7 @@ RotaryDirection Input::readRotaryPosition()
 
     int32_t new_position = rotaryEncoder.getEncoderPosition();
     // did we move arounde?
-    if (encoder_position != new_position)
+    if (encoder_position != new_position && abs(new_position) % 2 == 0)
     {
         Serial.println(new_position); // display new position
 
