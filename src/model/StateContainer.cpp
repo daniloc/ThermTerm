@@ -3,7 +3,7 @@
 
 #include <functional>
 
-#define DIM_SCREEN_CUTOFF_LUX 5
+#define DIM_SCREEN_CUTOFF_LUX 1
 
 StateContainer *StateContainer::instance = nullptr; // Initialize static member
 
@@ -16,7 +16,8 @@ bool StateContainer::shouldDimScreen()
     return stateData_.lux < DIM_SCREEN_CUTOFF_LUX;
 }
 
-void StateContainer::scheduleUpdate() {
+void StateContainer::scheduleUpdate()
+{
     needsUpdate = true;
     batchScheduleTime = 0;
 }
@@ -159,6 +160,7 @@ void StateContainer::configure()
 {
     mitsubishiSend.prepare();
     haInterface_.configure(stateData_.celsius);
+    setToneChannel(2);
 
     haInterface_.getHVACDevice().onModeCommand(&StateContainer::staticHandleRemoteModeChange);
     haInterface_.getHVACDevice().onPowerCommand(StateContainer::staticHandleRemotePowerChange);
@@ -167,7 +169,6 @@ void StateContainer::configure()
 
     haInterface_.getAlertTrigger().onCommand(StateContainer::staticHandleAlert);
 }
-
 
 // getters
 StateData StateContainer::getState() { return stateData_; };
@@ -236,6 +237,8 @@ void StateContainer::incrementSetPoint()
     float setPoint = stateData_.setPoint;
     setPoint += setPointStep;
     setSetPoint(setPoint);
+    tone(A1, 200, 25);
+    tone(A1, 250, 25);
 }
 
 void StateContainer::decrementSetPoint()
@@ -243,6 +246,8 @@ void StateContainer::decrementSetPoint()
     float setPoint = stateData_.setPoint;
     setPoint -= setPointStep;
     setSetPoint(setPoint);
+    tone(A1, 200, 25);
+    tone(A1, 150, 25);
 }
 
 void StateContainer::togglePower()
@@ -302,7 +307,8 @@ void StateContainer::staticHandleRemoteModeChange(HAHVAC::Mode mode, HAHVAC *sen
     }
 }
 
-void StateContainer::staticHandleAlert(bool status, HASwitch *sender) {
+void StateContainer::staticHandleAlert(bool status, HASwitch *sender)
+{
     Serial.print("switch changed");
     sender->setState(status);
 }

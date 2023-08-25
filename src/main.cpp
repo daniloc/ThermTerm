@@ -13,8 +13,6 @@
 #include "hardware/WifiInterface.h"
 #include <WiFi.h>
 
-
-
 StateContainer state;
 EnvSensor sensor = EnvSensor();
 Input &input = Input::shared();
@@ -32,9 +30,9 @@ void handleInput(InputEvent event)
 void updateEnvironmentData(float temp, float humidity, float lux)
 {
 
-  if (temp != state.getState().temperature || 
-  humidity != state.getState().humidity ||
-  lux != state.getState().lux)
+  if (temp != state.getState().temperature ||
+      humidity != state.getState().humidity ||
+      lux != state.getState().lux)
   {
     state.setHumidity(humidity);
     state.setTemperature(temp);
@@ -42,9 +40,12 @@ void updateEnvironmentData(float temp, float humidity, float lux)
     statusView.draw();
   }
 
-  if (lux < 20) {
+  if (state.shouldDimScreen())
+  {
     Display::shared().dimScreen();
-  } else {
+  }
+  else
+  {
     Display::shared().brightScreen();
   }
 }
