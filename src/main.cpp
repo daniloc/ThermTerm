@@ -5,6 +5,7 @@
 #include "views/BaseView.h"
 #include "hardware/Display.h"
 #include "hardware/EnvSensor.h"
+#include "hardware/Audio.h"
 #include "hardware/Input.h"
 
 #include "views/StatusView.h"
@@ -61,6 +62,8 @@ void setup(void)
   sensor.configure();
   input.configure();
   statusView.draw();
+
+  Audio::configure();
 
   WifiInterface::shared().configure();
   state.configure();

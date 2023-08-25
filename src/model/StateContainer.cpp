@@ -1,4 +1,5 @@
 #include "hardware/MitsubishiInterface.h"
+#include "hardware/Audio.h"
 #include "StateContainer.h"
 
 #include <functional>
@@ -160,7 +161,6 @@ void StateContainer::configure()
 {
     mitsubishiSend.prepare();
     haInterface_.configure(stateData_.celsius);
-    setToneChannel(2);
 
     haInterface_.getHVACDevice().onModeCommand(&StateContainer::staticHandleRemoteModeChange);
     haInterface_.getHVACDevice().onPowerCommand(StateContainer::staticHandleRemotePowerChange);
@@ -237,8 +237,7 @@ void StateContainer::incrementSetPoint()
     float setPoint = stateData_.setPoint;
     setPoint += setPointStep;
     setSetPoint(setPoint);
-    tone(A1, 200, 25);
-    tone(A1, 250, 25);
+    Audio::play_UpwardTone();
 }
 
 void StateContainer::decrementSetPoint()
@@ -246,8 +245,7 @@ void StateContainer::decrementSetPoint()
     float setPoint = stateData_.setPoint;
     setPoint -= setPointStep;
     setSetPoint(setPoint);
-    tone(A1, 200, 25);
-    tone(A1, 150, 25);
+    Audio::play_DownwardTone();
 }
 
 void StateContainer::togglePower()
