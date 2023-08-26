@@ -2,7 +2,7 @@
 #define SRC_VIEWS_BASEVIEW
 
 #include "hardware/Display.h"
-#include "hardware/Input.h"
+#include "hardware/input/Input.h"
 
 #include <Arduino.h>
 #include <Adafruit_ST7789.h>

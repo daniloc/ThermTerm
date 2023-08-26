@@ -1,6 +1,6 @@
 #include "SetPointView.h"
 #include "hardware/Display.h"
-#include "hardware/Input.h"
+#include "hardware/input/Input.h"
 
 void SetPointView::draw()
 {

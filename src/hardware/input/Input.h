@@ -4,15 +4,7 @@
 #include "utility/SingletonTemplate.h"
 #include "_Constants.h"
 
-#include "Adafruit_seesaw.h"
-#include "seesaw_neopixel.h"
-
-enum RotaryDirection
-{
-    Unchanged,
-    Up,
-    Down
-};
+#include "RotaryEncoder.h"
 
 enum InputSource
 {
@@ -37,10 +29,14 @@ struct UserInput
     InputSource source;
     InputEvent event = Click;
 
-    UserInput(InputSource source) : source(source) {
-        if (source == RotaryDown || source == RotaryUp) {
+    UserInput(InputSource source) : source(source)
+    {
+        if (source == RotaryDown || source == RotaryUp)
+        {
             event = ValueChange;
-        } else {
+        }
+        else
+        {
             event = Click;
         }
     }
@@ -58,18 +54,17 @@ public:
     void heartbeat();
     void setCallback(InputHandlingCallback callback);
     void processInput(UserInput input);
-    seesaw_NeoPixel *getNeoPixel() { return &encoderPixel_; };
+    void rotaryEncoderHandler(RotaryEncoder::Event);
+    seesaw_NeoPixel *getNeoPixel() { return rotaryEncoder_.getNeopixel(); };
 
 private:
     bool readRotaryButton();
-    RotaryDirection readRotaryPosition();
     void handleRotaryButton();
     void handleRotaryUp();
     void handleRotaryDown();
+    RotaryEncoder rotaryEncoder_;
 
     static InputHandlingCallback inputHandlingCallback;
-    Adafruit_seesaw rotaryEncoder;
-    seesaw_NeoPixel encoderPixel_ = seesaw_NeoPixel(1, ENCODER_NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
 };
 
 #endif // SRC_HARDWARE_INPUT

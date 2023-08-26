@@ -12,6 +12,13 @@ class Display: public Singleton<Display>
 
 public:
 
+enum StatusLight {
+    Red,
+    Blue,
+    White,
+    Off
+};
+
     Adafruit_ST7789 &configure();
     void clearScreen();
 
@@ -20,6 +27,8 @@ public:
 
     void dimScreen();
     void brightScreen();
+
+    void setStatusLight(StatusLight);
 
 private:
     void drawInitScreen();

@@ -6,7 +6,7 @@
 #include "hardware/Display.h"
 #include "hardware/EnvSensor.h"
 #include "hardware/Audio.h"
-#include "hardware/Input.h"
+#include "hardware/input/Input.h"
 #include "hardware/infrared/MitsubishiInterface.h"
 
 #include "views/StatusView.h"
@@ -19,8 +19,8 @@ MitsubishiInterface mitsubishiInterface; // Create alternative IR schemes by sub
 SystemController controller(mitsubishiInterface);
 
 EnvSensor sensor = EnvSensor();
-Input &input = Input::shared();
 
+Input &input = Input::shared();
 Adafruit_ST7789 &tft = Display::shared().configure();
 StatusView statusView(tft, controller);
 BaseView &activeView = statusView;
