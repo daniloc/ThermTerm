@@ -18,7 +18,7 @@ public:
 
     virtual void draw() = 0; // declare a pure virtual function
 
-    virtual void handleInputEvent(InputEvent event) = 0;
+    virtual void handleInputEvent(UserInput event) = 0;
 
     std::queue<BaseView*> viewHierarchy;
 

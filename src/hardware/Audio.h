@@ -2,13 +2,8 @@
 #define SRC_HARDWARE_SOUNDINTERFACE
 
 #include <Arduino.h>
+#include "_Constants.h"
 
-#define PWM_TONE_CHANNEL 2 // Get off the main PWM channel, or LED pulses will leak out the speaker
-#define PIEZO_PIN A1
-
-#define PIEZO_BASE_FREQUENCY 200
-
-#define UI_CHIRP_NOTE_LENGTH 25
 
 class Audio
 {

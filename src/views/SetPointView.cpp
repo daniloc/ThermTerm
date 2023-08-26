@@ -30,19 +30,19 @@ void SetPointView::draw()
     tft.print(String(int(controller_.getState().setPoint))); // print the string
 }
 
-void SetPointView::handleInputEvent(InputEvent event)
+void SetPointView::handleInputEvent(UserInput input)
 {
-    switch (event)
+    switch (input.source)
     {
-    case InputEvent::RotaryUp:
+    case RotaryUp:
         controller_.incrementSetPoint();
          break;
 
-    case InputEvent::RotaryDown:
+    case RotaryDown:
          controller_.decrementSetPoint();
          break;
 
-    case InputEvent::RotaryButton:
+    case RotaryButton:
         break;
 
     default:

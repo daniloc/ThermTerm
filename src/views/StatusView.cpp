@@ -88,7 +88,7 @@ void StatusView::draw()
   tft.print("HEAT");
 }
 
-void StatusView::handleInputEvent(InputEvent event)
+void StatusView::handleInputEvent(UserInput input)
 {
 
   lastInputEventTime = millis();
@@ -96,32 +96,32 @@ void StatusView::handleInputEvent(InputEvent event)
   if (viewHierarchy.size() > 0)
   {
     Serial.print("redirecting input");
-    viewHierarchy.front()->handleInputEvent(event);
+    viewHierarchy.front()->handleInputEvent(input);
 
     return;
   }
 
-  switch (event)
+  switch (input.source)
   {
-  case InputEvent::RotaryUp:
+  case RotaryUp:
     viewHierarchy.push(&setPointView_);
     controller_.incrementSetPoint();
     break;
-  case InputEvent::RotaryDown:
+  case RotaryDown:
     viewHierarchy.push(&setPointView_);
     controller_.decrementSetPoint();
     break;
-  case InputEvent::Button0:
+  case Button0:
     controller_.setHVACMode(HVAC_COLD);
     break;
-  case InputEvent::Button1:
+  case Button1:
     viewHierarchy.push(&dialView_);
     draw();
     break;
-  case InputEvent::Button2:
+  case Button2:
     controller_.setHVACMode(HVAC_HOT);
     break;
-  case InputEvent::RotaryButton:
+  case RotaryButton:
     controller_.togglePower();
     break;
   default:

@@ -2,10 +2,7 @@
 
 #include <queue>
 
-std::queue<InputEvent> eventQueue;
-
-#define ENCODER_SWITCH 24
-#define SEESAW_ADDR 0x36
+std::queue<UserInput> eventQueue;
 
 int32_t encoder_position;
 
@@ -15,10 +12,6 @@ unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
 unsigned long debounceDelay = 50;
 bool lastButtonState = false;
 bool buttonState = true;
-
-#define BUTTON0_PIN 0
-#define BUTTON1_PIN 1
-#define BUTTON2_PIN 2
 
 volatile unsigned long lastInterruptTime0 = 0;
 volatile unsigned long lastInterruptTime1 = 0;
@@ -30,7 +23,7 @@ void handleButton0Press()
     if ((millis() - lastInterruptTime0) > debounceTime)
     {
         Serial.println(F("Button 0 pressed"));
-        eventQueue.push(InputEvent::Button0);
+        eventQueue.push(UserInput(Button0));
     }
     lastInterruptTime0 = millis();
 }
@@ -40,7 +33,7 @@ void handleButton1Press()
     if ((millis() - lastInterruptTime1) > debounceTime)
     {
         Serial.println(F("Button 1 pressed"));
-        eventQueue.push(InputEvent::Button1);
+        eventQueue.push(UserInput(Button1));
     }
     lastInterruptTime1 = millis();
 }
@@ -50,14 +43,15 @@ void handleButton2Press()
     if ((millis() - lastInterruptTime2) > debounceTime)
     {
         Serial.println(F("Button 2 pressed"));
-        eventQueue.push(InputEvent::Button2);
-    }
+        eventQueue.push(UserInput(Button2));
+    };
+
     lastInterruptTime2 = millis();
 }
 
 // *** Input Handlers
 
-void Input::processInput(InputEvent input)
+void Input::processInput(UserInput input)
 {
     if (inputHandlingCallback != nullptr)
     {
@@ -68,19 +62,19 @@ void Input::processInput(InputEvent input)
 void Input::handleRotaryButton()
 {
     Serial.print(F("Rotary button"));
-    processInput(InputEvent::RotaryButton);
+    processInput(UserInput(RotaryButton));
 }
 
 void Input::handleRotaryUp()
 {
     Serial.print(F("Rotary up"));
-    processInput(InputEvent::RotaryUp);
+    processInput(UserInput(RotaryUp));
 }
 
 void Input::handleRotaryDown()
 {
     Serial.print(F("Rotary down"));
-    processInput(InputEvent::RotaryDown);
+    processInput(UserInput(RotaryDown));
 }
 
 // *** Lifecycle
@@ -120,7 +114,7 @@ bool Input::readRotaryButton()
 
     bool buttonPressed = false;
 
-    bool newButtonState = rotaryEncoder.digitalRead(ENCODER_SWITCH);
+    bool newButtonState = rotaryEncoder.digitalRead(ENCODER_SWITCH_PIN);
 
     if (newButtonState != lastButtonState)
     {
@@ -194,7 +188,7 @@ void Input::configure()
 
     Serial.print("Looking for seesaw!");
 
-    if (!rotaryEncoder.begin(SEESAW_ADDR) || !encoderPixel_.begin(SEESAW_ADDR))
+    if (!rotaryEncoder.begin(ROTARY_ENCODER_ADDRESS) || !encoderPixel_.begin(ROTARY_ENCODER_ADDRESS))
     {
         Serial.print("Couldn't find seesaw on default address");
     }
@@ -218,9 +212,9 @@ void Input::configure()
     encoder_position = rotaryEncoder.getEncoderPosition();
 
     // use a pin for the built in encoder switch
-    rotaryEncoder.pinMode(ENCODER_SWITCH, INPUT_PULLUP);
+    rotaryEncoder.pinMode(ENCODER_SWITCH_PIN, INPUT_PULLUP);
 
-    rotaryEncoder.setGPIOInterrupts((uint32_t)1 << ENCODER_SWITCH, 1);
+    rotaryEncoder.setGPIOInterrupts((uint32_t)1 << ENCODER_SWITCH_PIN, 1);
     rotaryEncoder.enableEncoderInterrupt();
 }
 

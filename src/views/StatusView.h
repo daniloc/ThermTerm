@@ -21,7 +21,7 @@ public:
     }
 
     void draw() override;
-    void handleInputEvent(InputEvent event) override;
+    void handleInputEvent(UserInput) override;
     void heartbeat();
 
 private:

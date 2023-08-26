@@ -45,11 +45,11 @@ void DialView::draw() {
     tft.print(output);            // print the string
 }
 
-void DialView::handleInputEvent(InputEvent event)
+void DialView::handleInputEvent(UserInput event)
 {
-    switch (event)
+    switch (event.source)
     {
-    case InputEvent::RotaryUp:
+    case RotaryUp:
         // Handle increase in fan mode
         if (controller_.getFanSpeed() >= FAN_SPEED_SILENT)
         {
@@ -63,7 +63,7 @@ void DialView::handleInputEvent(InputEvent event)
         }
         break;
 
-    case InputEvent::RotaryDown:
+    case RotaryDown:
         // Handle decrease in fan mode
         if (controller_.getFanSpeed() <= FAN_SPEED_1)
         {
@@ -77,7 +77,7 @@ void DialView::handleInputEvent(InputEvent event)
         }
         break;
 
-    case InputEvent::RotaryButton:
+    case RotaryButton:
         break;
 
     default:

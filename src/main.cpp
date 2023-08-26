@@ -25,10 +25,10 @@ Adafruit_ST7789 &tft = Display::shared().configure();
 StatusView statusView(tft, controller);
 BaseView &activeView = statusView;
 
-void handleInput(InputEvent event)
+void handleInput(UserInput input)
 {
   Serial.print(F("forwarded input"));
-  activeView.handleInputEvent(event);
+  activeView.handleInputEvent(input);
 }
 
 void updateEnvironmentData(float temp, float humidity, float lux)

@@ -16,7 +16,7 @@ public:
     }
 
     void draw() override;
-    void handleInputEvent(InputEvent event) override;
+    void handleInputEvent(UserInput event) override;
 
 private:
     SystemController &controller_;

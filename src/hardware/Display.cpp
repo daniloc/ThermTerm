@@ -1,11 +1,9 @@
 #include "Display.h"
+#include "_Constants.h"
 
 #include <Adafruit_GFX.h> // Core graphics library
 
 uint16_t screenFillColor = ST77XX_BLACK;
-
-#define SCREEN_WIDTH 240  // display width, in pixels
-#define SCREEN_HEIGHT 135 // display height, in pixels
 
 void Display::drawInitScreen()
 {
