@@ -21,9 +21,9 @@
 
 #define ENV_SENSOR_INTERVAL 5 // Seconds
 
-#define BUTTON0_PIN 0
-#define BUTTON1_PIN 1
-#define BUTTON2_PIN 2
+const int BUTTON0_PIN = 0;
+const int BUTTON1_PIN = 1;
+const int BUTTON2_PIN = 2;
 
 #define ROTARY_ENCODER_ADDRESS 0x36
 #define ENCODER_SWITCH_PIN 24

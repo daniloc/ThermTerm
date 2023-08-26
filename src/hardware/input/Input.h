@@ -6,6 +6,9 @@
 
 #include "RotaryEncoder.h"
 
+#include <AceButton.h>
+using namespace ace_button;
+
 enum InputSource
 {
     RotaryUp,
@@ -52,10 +55,11 @@ class Input : public Singleton<Input>
 public:
     void configure();
     void heartbeat();
-    void setCallback(InputHandlingCallback callback);
+    void setCallback(InputHandlingCallback callback) { inputHandlingCallback = callback;};
     void processInput(UserInput input);
     void rotaryEncoderHandler(RotaryEncoder::Event);
     seesaw_NeoPixel *getNeoPixel() { return rotaryEncoder_.getNeopixel(); };
+    static void handleButton(AceButton *button, uint8_t eventType, uint8_t buttonState);
 
 private:
     bool readRotaryButton();
