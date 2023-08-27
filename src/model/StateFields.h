@@ -18,13 +18,13 @@ typedef enum HvacPower
 
 typedef enum HvacFanMode
 {
-    FAN_SPEED_1 = 0,
+    FAN_SPEED_AUTO = 0,
+    FAN_SPEED_1,
     FAN_SPEED_2,
     FAN_SPEED_3,
     FAN_SPEED_4,
-    FAN_SPEED_5,
-    FAN_SPEED_AUTO,
-    FAN_SPEED_SILENT
+    FAN_SPEED_GAP,
+    FAN_SPEED_SILENT = 6
 } HvacFanMode_t; // HVAC  FAN MODE
 
 typedef enum HvacVaneMode

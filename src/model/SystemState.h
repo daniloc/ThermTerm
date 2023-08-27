@@ -19,7 +19,7 @@ struct SystemState
     float setPoint = 65;
     float lux = 0;
     HvacMode hvacMode = HVAC_COLD;
-    HvacFanMode fanSpeed = FAN_SPEED_5;
+    HvacFanMode fanSpeed = FAN_SPEED_4;
     HvacPower power = OFF;
 
     bool celsius = false;

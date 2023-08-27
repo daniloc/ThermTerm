@@ -99,7 +99,7 @@ HvacFanMode convertFanMode(HAHVAC::FanMode haFanMode)
     case HAHVAC::MediumFanMode:
         return FAN_SPEED_3;
     case HAHVAC::HighFanMode:
-        return FAN_SPEED_5;
+        return FAN_SPEED_4;
     default:
         return FAN_SPEED_AUTO;
     }

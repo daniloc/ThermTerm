@@ -28,9 +28,6 @@ void DialView::draw() {
     case FAN_SPEED_4:
         output = "****";
         break;
-    case FAN_SPEED_5:
-        output = "*****";
-        break;
     case FAN_SPEED_AUTO:
         output = "Auto";
         break;
@@ -51,29 +48,40 @@ void DialView::handleInputEvent(UserInput event)
     {
     case RotaryUp:
         // Handle increase in fan mode
+
         if (controller_.getFanSpeed() >= FAN_SPEED_SILENT)
         {
             // If fan mode is at the maximum, loop around to the minimum
-            controller_.setFanSpeed(FAN_SPEED_1);
+            controller_.setFanSpeed(FAN_SPEED_AUTO);
         }
         else
         {
-            // Otherwise, just increment the fan mode
-            controller_.setFanSpeed((HvacFanMode)(controller_.getFanSpeed() + 1));
+            HvacFanMode newSpeed = (HvacFanMode_t)(controller_.getFanSpeed() + 1);
+            // Skip the gap
+            if (newSpeed == FAN_SPEED_GAP)
+            {
+                newSpeed = (HvacFanMode_t)(newSpeed + 1);
+            }
+            controller_.setFanSpeed(newSpeed);
         }
         break;
 
     case RotaryDown:
         // Handle decrease in fan mode
-        if (controller_.getFanSpeed() <= FAN_SPEED_1)
+        if (controller_.getFanSpeed() <= FAN_SPEED_AUTO)
         {
             // If fan mode is at the minimum, loop around to the maximum
             controller_.setFanSpeed(FAN_SPEED_SILENT);
         }
         else
         {
-            // Otherwise, just decrement the fan mode
-            controller_.setFanSpeed((HvacFanMode)(controller_.getFanSpeed() - 1));
+            HvacFanMode newSpeed = (HvacFanMode_t)(controller_.getFanSpeed() - 1);
+            // Skip the gap
+            if (newSpeed == FAN_SPEED_GAP)
+            {
+                newSpeed = (HvacFanMode_t)(newSpeed - 1);
+            }
+            controller_.setFanSpeed(newSpeed);
         }
         break;
 
