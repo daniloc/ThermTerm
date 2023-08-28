@@ -16,11 +16,16 @@ public:
     BaseView(Adafruit_ST7789 &tft)
         : tft(tft), width(Display::shared().getWidth()), height(Display::shared().getHeight()) {}
 
+    void dismissSubview()
+    {
+        shouldDismissModal = true;
+    }
+
     virtual void draw() = 0; // declare a pure virtual function
 
     virtual void handleInputEvent(UserInput event) = 0;
 
-    std::queue<BaseView*> viewHierarchy;
+    std::queue<BaseView *> viewHierarchy;
 
 protected:
     void drawTextRightAligned(int y, const String &text)
@@ -35,5 +40,6 @@ protected:
     Adafruit_ST7789 &tft;
     uint16_t width;
     uint16_t height;
+    bool shouldDismissModal;
 };
 #endif // SRC_VIEWS_BASEVIEW

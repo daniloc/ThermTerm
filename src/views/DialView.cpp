@@ -2,7 +2,8 @@
 #include "hardware/Display.h"
 #include "hardware/input/Input.h"
 
-void DialView::draw() {
+void DialView::draw()
+{
 
     Display::shared().clearScreen();
 
@@ -36,10 +37,10 @@ void DialView::draw() {
         break;
     }
 
-    tft.setCursor(0, 60);            // set cursor position, adjust as necessary
+    tft.setCursor(0, 60);           // set cursor position, adjust as necessary
     tft.setTextColor(ST77XX_WHITE); // set text color, adjust as necessary
     tft.setTextSize(3);             // set text size, adjust as necessary
-    tft.print(output);            // print the string
+    tft.print(output);              // print the string
 }
 
 void DialView::handleInputEvent(UserInput event)

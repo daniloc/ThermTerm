@@ -101,14 +101,26 @@ void StatusView::handleInputEvent(UserInput input)
   switch (input.source)
   {
   case RotaryUp:
+    if (controller_.getState().power == OFF)
+    {
+      return;
+    };
+
     viewHierarchy.push(&setPointView_);
     controller_.incrementSetPoint();
     break;
   case RotaryDown:
+  
+    if (controller_.getState().power == OFF)
+    {
+      return;
+    };
+
     viewHierarchy.push(&setPointView_);
     controller_.decrementSetPoint();
     break;
   case Button0:
+    viewHierarchy.push(&setPointView_);
     controller_.setHVACMode(HVAC_COLD);
     break;
   case Button1:
@@ -116,9 +128,14 @@ void StatusView::handleInputEvent(UserInput input)
     draw();
     break;
   case Button2:
+    viewHierarchy.push(&setPointView_);
     controller_.setHVACMode(HVAC_HOT);
     break;
   case RotaryButton:
+    if (controller_.getState().power == OFF)
+    {
+      viewHierarchy.push(&setPointView_);
+    }
     controller_.togglePower();
     break;
   default:
@@ -133,7 +150,7 @@ void StatusView::objectDidChange()
 
 void StatusView::heartbeat()
 {
-  if (millis() - lastInputEventTime >= modalViewDuration)
+  if (millis() - lastInputEventTime >= modalViewDuration || shouldDismissModal == true)
   {
     // Dismiss the modal view if needed
     if (!viewHierarchy.empty())
@@ -143,5 +160,7 @@ void StatusView::heartbeat()
       Display::shared().clearScreen();
       draw();
     }
+
+    shouldDismissModal = false;
   }
 }

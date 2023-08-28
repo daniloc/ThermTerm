@@ -260,6 +260,7 @@ void SystemController::togglePower()
         haInterface_.getHVACDevice().setMode(reverseConvertMode(state_.hvacMode));
     }
 
+    needsUpdate = false;
     sendInfraredCommand();
     notifyObservers();
 }
@@ -267,7 +268,6 @@ void SystemController::togglePower()
 void SystemController::heartbeat()
 {
     haInterface_.heartbeat();
-
     checkInputBatching();
 }
 

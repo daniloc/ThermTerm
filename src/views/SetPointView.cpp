@@ -43,10 +43,12 @@ void SetPointView::handleInputEvent(UserInput input)
          break;
 
     case RotaryButton:
-        break;
-
-    default:
-        break;
+        controller_.togglePower();
+        if (controller_.getState().power == OFF) {
+            superview_.dismissSubview();
+        }
+        return;
+        
     }
     draw();
 }
