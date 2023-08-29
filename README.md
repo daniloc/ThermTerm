@@ -69,9 +69,9 @@ If you want to go all-in and asemble one of these for yourself, 3D printing file
 
 There's a lot more this platform could do, but this is the minimally-useful implementation that can get your whole heat pump system integrated in with an afternoon of work. Future features:
 
-- [] Display alerts issued from Home Assistant
-- [] Trigger alerts distributed to all other ThermTerm devices on the network
-- [] Bulk provisioning
+- [ ] Display alerts issued from Home Assistant
+- [ ] Trigger alerts distributed to all other ThermTerm devices on the network
+- [ ] Bulk provisioning
 
 ## Contributions
 
