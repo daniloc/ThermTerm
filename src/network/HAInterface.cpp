@@ -1,5 +1,6 @@
 #include "HAInterface.h"
 #include "wifiCredentials.h"
+#include "_Constants.h"
 
 WiFiClient client;
 
@@ -13,16 +14,16 @@ HAInterface::HAInterface() : macAddress_(generateMacAddress()),
                              hvacDevice_(
                                  "heat-pump",
                                  HAHVAC::TargetTemperatureFeature |
-                                 HAHVAC::PowerFeature | 
-                                 HAHVAC::ModesFeature |
-                                 HAHVAC::FanFeature)
+                                     HAHVAC::PowerFeature |
+                                     HAHVAC::ModesFeature |
+                                     HAHVAC::FanFeature)
 {
 }
 
 void HAInterface::configure(bool useCelsius)
 {
-    haDevice_.setName("Enviropad");
-    haDevice_.setSoftwareVersion("0.12");
+    haDevice_.setName("Thermterm");
+    haDevice_.setSoftwareVersion(VERSION_NUMBER);
 
     humiditySensor_.setIcon("mdi:water-percent");
     humiditySensor_.setName("Relative Humidity");
@@ -41,13 +42,16 @@ void HAInterface::configure(bool useCelsius)
     hvacDevice_.setName("Heat Pump");
     hvacDevice_.setCurrentMode(HAHVAC::CoolMode);
     hvacDevice_.setFanModes(HAHVAC::AutoFanMode |
-    HAHVAC::LowFanMode |
-     HAHVAC::MediumFanMode |
-     HAHVAC::HighFanMode);
+                            HAHVAC::LowFanMode |
+                            HAHVAC::MediumFanMode |
+                            HAHVAC::HighFanMode);
 
-    if (useCelsius) {
+    if (useCelsius)
+    {
         hvacDevice_.setTemperatureUnit(HAHVAC::TemperatureUnit::CelsiusUnit);
-    } else {
+    }
+    else
+    {
         hvacDevice_.setTemperatureUnit(HAHVAC::TemperatureUnit::FahrenheitUnit);
     }
 

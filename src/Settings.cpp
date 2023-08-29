@@ -121,7 +121,7 @@ void Settings::printWelcomePrompt()
 {
     newline();
     newline();
-    Serial.print("======= Welcome to Enviropad =======\n");
+    Serial.print("======= Welcome to ThermTerm =======\n");
 
     if (preferences.begin("enviropad", false))
     {
