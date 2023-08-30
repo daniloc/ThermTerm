@@ -1,5 +1,5 @@
 #include "HAInterface.h"
-#include "wifiCredentials.h"
+#include "_Credentials.h"
 #include "_Constants.h"
 
 WiFiClient client;

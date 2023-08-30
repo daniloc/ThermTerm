@@ -1,5 +1,5 @@
 #include "WifiInterface.h"
-#include "wifiCredentials.h"
+#include "_Credentials.h"
 
 WifiInterface::WifiInterface()
 {
