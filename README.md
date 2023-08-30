@@ -1,4 +1,7 @@
 # ThermTerm: an open source heat pump controller and home automation terminal, built on ESP32
+
+**Control heatpumps manually or remotely, using MQTT/Home Assistant**.
+
 I love my heat pumps. They're energy efficient and the fastest way to heat or cool any room.
 
 But I've always hated the remote controls that come with heat pumps. They're clunky and hard to read, especially in low light. In theory, you can program schedules for your heat pumps, but in practice the remotes are too frustrating to use for that.
@@ -17,33 +20,33 @@ Through a TFT screen, readouts are visible any time of day. The chunky dial is e
 
 ## Goals
 
-- Make a heat pump interface I don't hate using
-- Use a flexible, broadly-useful interface, IR, instead of a manufacturer-specific serial connection
+- Make a heat pump controller I don't hate using
+- Use easy-to-repurpose IR, instead of a manufacturer-specific serial connection
 - Structure this project into discrete objects to make iteration, maintenance and enhancements easy
 - Provide hobbyists with a reference for Arduino code with that kind of structure (I had a hard time finding it for end projects, only libraries)
-- Build a device that expands the surface area of a home automation system, letting it gather more data and provide more feedback
-- Leverage as much of the existing Arduino code ecosystem as possible, keeping the project tightly scoped to its problem domain
+- Build a device that expands the surface area of a home automation system, letting it gather more data, take more user input, and provide more feedback
+- Leverage as much of the existing Arduino OSS code ecosystem as possible, keeping the project tightly scoped to its problem domain
 
 ## Bill of materials
 
-- Adafruit ESP32-S3 Reverse TFT
+- Adafruit ESP32-S3 Feather Reverse TFT
 - Adafruit I2C rotary encoder board with Neopixel
 - IR blaster board
 - Optional: 5mm IR LED
-- Optional: Piezo buzzer, for auditory feedback now and later: alerts
+- Optional: Piezo buzzer, for auditory feedback now (and later: alerts)
 - Optional: LiPo battery, so the devices can still communicate during a power outage
 - Temperature/humidity sensor
 - Light sensor
-- 3 100mm StemmaQT/Qwiic cables
-- 1 50mm StemmaQT/Qwicc cable
+- 1 100mm StemmaQT/Qwiic cable
+- 2 50mm StemmaQT/Qwicc cables
 - Opaque PETG to print the main case
 - Translucent PETG to print the dial
 
-The sensors use I2C, so with a light rewrite, you can replace the above models with alternatives if needed, or skip them entirely if you don't care about recording data.
+The sensors use I2C, so with a light rewrite, you can replace the above models with alternatives if needed, or skip them entirely if you don't care about recording data back to Home Assistant.
 
-If you want to design your own enclosure, I suspect any ESP32-based device will work fine.
+If you want to design your own enclosure and use a different display, I suspect any ESP32-based device will work fine.
 
-I do a lot with backup power, but if you don't, I'm sure you can skip the battery without trouble.
+There's not a huge upside to the battery in the current implementation but I designed the case to accommodate it for future enhancements. You can skip it unless you want to tinker with power outage-related home automation tasks.
 
 ## Customization
 
@@ -63,7 +66,7 @@ To tweak other details about the device, explore `_Constants.h`. To adapt this t
 
 ## Assembly
 
-If you want to go all-in and asemble one of these for yourself, 3D printing files have been provided. See ASSEMBLY.md for detailed instructions.
+If you want to go all-in and asemble one of these for yourself, 3D printing files have been provided. See [ASSEMBLY.md](ASSEMBLY.md) for detailed instructions.
 
 ## Roadmap
 
