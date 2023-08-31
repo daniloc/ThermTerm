@@ -45,4 +45,4 @@ To manage the StemmaQT cables, use the raceway molded into the base to tuck the 
 
 <img height=400 src="https://github.com/daniloc/ThermTerm/assets/213358/06c2e1fd-6643-43c7-a856-0c1246508d2f">
 
-If desired, print the key caps and press-fit them into the rectangular holes on the front of the case. Pop on the dial, and you're done.
+If desired, print the key caps and press-fit them into the rectangular recesses on the buttons in front of the case. Pop on the dial, and you're done.
