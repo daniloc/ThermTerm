@@ -1,5 +1,7 @@
 # ThermTerm: an open source heat pump controller and home automation terminal, built on ESP32
 
+![image](https://github.com/daniloc/ThermTerm/assets/213358/c3d5e749-000b-4d88-8361-5ec403e4682f)
+
 **Control heatpumps manually or remotely via MQTT/Home Assistant**.
 
 I love my heat pumps. They're energy efficient and the fastest way to heat or cool any room.
@@ -29,6 +31,12 @@ Through a TFT screen, readouts are visible any time of day. The chunky dial is e
 - Provide hobbyists with a reference for Arduino code with that kind of structure (I had a hard time finding it for end projects, only libraries)
 - Build a device that expands the surface area of a home automation system, letting it gather more data, take more user input, and provide more feedback
 - Leverage as much of the existing Arduino OSS code ecosystem as possible, keeping the project tightly scoped to its problem domain
+
+## Shoutouts/core dependencies
+
+- [Adafruit](https://learn.adafruit.com), whose thorough libraries and thoughtful breakout boards made hardware integration a breeze
+- `[IRRemoteESP8266](https://github.com/crankyoldgit/IRremoteESP8266)`, a library with bulletproof software-based PWM, a great API, and a shocking compendium of IR protocols
+- `[arduino-home-assistant](https://github.com/dawidchyrzynski/arduino-home-assistant)`, an MQTT library with exhaustive implementations of Home Assistant-supported devices
 
 ## Bill of materials
 
@@ -70,6 +78,18 @@ Fill in these values as appropriate to your network:
 
 #define MQTT_BROKER IPAddress(192, 168, 1, 100)
 ```
+
+## Home Assistant
+
+With correct MQTT credentials, ThermTerm should be discovered automatically in the Home Assistant MQTT configuration.
+
+**To troubleshoot, uncomment this line in `platfomio.ini`:**
+
+```yaml
+build_flags = -D ARDUINOHA_DEBUG
+```
+
+This will log MQTT events and errors via serial.
 
 ## Customization
 
