@@ -10,6 +10,8 @@ But I've always hated the remote controls that come with heat pumps. They're clu
 
 ThermTerm solves all the problems I've had with these physical controls, while integrating the heat pumps into Home Assistant via MQTT. Additional sensors pipe temperature, humidity and light data, for statistics and automation. Out of the box, ThermTerm supports Mitsubishi's infrared protocol, since that's the system I have. Thanks to integration with [IRRemoteESP8266](https://github.com/crankyoldgit/IRremoteESP8266), you can make ThermTerm work with [your own heat pumps](https://github.com/crankyoldgit/IRremoteESP8266/blob/master/SupportedProtocols.md) by writing a few lines of adaptor code. No signal analysis or reverse-engineering required. See [Customization](#customization) for more details.
 
+**Note: you will need [PlatformIO](https://platformio.org) to get started.**
+
 ## Interface
 
 <img width="527" alt="Diagram" src="https://github.com/daniloc/ThermTerm/assets/213358/84ab4068-a8c1-4b71-8363-61f4ab0f5899">
@@ -65,7 +67,7 @@ There's not a huge upside to the battery in the current implementation but I des
 
 ## Configuration
 
-Make a copy of `_Credentials.h.example`, rename it to `_Credentials.h`. This file will be ignored by git.
+Make a copy of [`_Credentials.h.example`](/src/_Credentials.h.example), rename it to `_Credentials.h`. This file will be ignored by git.
 
 Fill in these values as appropriate to your network:
 
@@ -95,7 +97,7 @@ This will log MQTT events and errors via serial.
 
 The most urgent customization for most will be making this work with your own heat pump.
 
-1. Write a subclass of `IRInterface`. You can use `MistubishiInterface` as a starting point. The goal is to translate the system controller's state model into whatever features you care about for your own heat pump. Consult IRremoteESP8266 for [the API that corresponds to your manufacturer](https://github.com/crankyoldgit/IRremoteESP8266/blob/master/SupportedProtocols.md).
+1. Write a subclass of [`IRInterface`](/src/hardware/infrared/IRInterface.h). You can use [`MistubishiInterface`](https://github.com/daniloc/ThermTerm/blob/main/src/hardware/infrared/MitsubishiInterface.cpp) as a starting point. The goal is to translate the system controller's state model into whatever features you care about for your own heat pump. Consult IRremoteESP8266 for [the API that corresponds to your manufacturer](https://github.com/crankyoldgit/IRremoteESP8266/blob/master/SupportedProtocols.md).
 2. In `main.cpp`, replace the `MitsubishiInterface` instance in the `SystemController` constructor with your own interface:
 
 ```C++
