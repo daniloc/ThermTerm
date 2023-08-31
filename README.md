@@ -12,9 +12,8 @@ ThermTerm solves all the problems I've had with these physical controls, while i
 
 ## Interface
 
-<p align="center">
-<img width="527" alt="Diagram" src="https://github.com/daniloc/ThermTerm/assets/213358/17835a63-d495-4553-853f-562c07adade9">
-</p>
+<img width="527" alt="Diagram" src="https://github.com/daniloc/ThermTerm/assets/213358/84ab4068-a8c1-4b71-8363-61f4ab0f5899">
+
 Press the dial to toggle power.
 
 Turn the dial to set temperature.
@@ -56,6 +55,7 @@ Through a TFT screen, readouts are visible any time of day. The chunky dial is e
 - A 5v USB power supply
 - Opaque PETG to print the main case
 - Translucent PETG to print the dial
+- [Velcro/picture hanging Command Strip](https://www.amazon.com/Command-Picture-Decorate-Damage-Free-PH206-14NA/dp/B073XR4X72/ref=sr_1_6?keywords=velcro%2Bcommand%2Bstrips&qid=1693506171&sr=8-6&th=1) to wall-mount
 
 The sensors use I2C, so with a light rewrite, you can replace the above models with alternatives if needed, or skip them entirely if you don't care about recording data back to Home Assistant.
 
