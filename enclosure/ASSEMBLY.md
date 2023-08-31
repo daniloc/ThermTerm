@@ -6,7 +6,7 @@ To build your own ThermTerm, follow along.
 
 ThermTerm relies mostly on I2C devices, so you can connect them together in whatever order you want. You can affix these components to a piece of cardboard to test things out and ensure everything is doing what you expect.
 
-
+![IMG_7676](https://github.com/daniloc/ThermTerm/assets/213358/6f04c1c9-9900-47f6-958d-a4b7f66801d4)
 
 
 If you'd like to use the included enclosure design, this sequence works best:
@@ -48,4 +48,8 @@ To manage the StemmaQT cables, use the raceway molded into the base to tuck the 
 
 <img height=400 src="https://github.com/daniloc/ThermTerm/assets/213358/06c2e1fd-6643-43c7-a856-0c1246508d2f">
 
-If desired, print the key caps and press-fit them into the rectangular recesses on the buttons in front of the case. Pop on the dial, and you're done.
+If desired, print the key caps and press-fit them into the rectangular recesses on the buttons in front of the case. I found it helped to remove the front face, position the key caps as best I could manage, then place the shell face down and gently press against the insides of the button tabs with the rubberized handle-end of some pliers. This clicked the keycaps into place without bending the tabs.
+
+<img height=400 src="https://github.com/daniloc/ThermTerm/assets/213358/7e776f4e-f80f-4d68-8ebb-849af3c725bc">
+
+Pop on the dial, and you're done.
