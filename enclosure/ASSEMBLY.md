@@ -4,13 +4,16 @@ To build your own ThermTerm, follow along.
 
 ## Circuit
 
-ThermTerm relies mostly on I2C devices, so you can connect them together in whatever order you want. If you'd like to use the included enclosure design, this sequence works best:
+ThermTerm relies mostly on I2C devices, so you can connect them together in whatever order you want. You can affix these components to a piece of cardboard to test things out and ensure everything is doing what you expect.
+
+
+
+
+If you'd like to use the included enclosure design, this sequence works best:
 
 <img width="326" alt="Screenshot 2023-08-30 at 11 41 31 PM" src="https://github.com/daniloc/ThermTerm/assets/213358/0dcd5ed1-f152-4741-85c4-ed8c4cd35101">
 
 By default, the infrared signal pin is `A0`, while the piezo signal is on `A1`. Change these in `_Constants.h` if needed. Oddly, the Feather only has a single ground pin on the board proper, so I snuck the piezo's ground wire into the IR blaster ground's solder blob. Seems to be fine.
-
-You can affix these components to a piece of cardboard to test things out and ensure everything is doing what you expect.
 
 ## 3D printing
 
