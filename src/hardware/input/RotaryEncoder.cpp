@@ -35,19 +35,25 @@ void RotaryEncoder::configure()
     seesawInterface_.enableEncoderInterrupt();
 }
 
-void RotaryEncoder::heartbeat() {
+void RotaryEncoder::heartbeat()
+{
 
     Direction rotaryDirection = readRotaryPosition();
 
-    if (rotaryDirection != Unchanged) {
-        if (rotaryDirection == Right) {
+    if (rotaryDirection != Unchanged)
+    {
+        if (rotaryDirection == Right)
+        {
             Input::shared().rotaryEncoderHandler(Up);
-        } else {
+        }
+        else
+        {
             Input::shared().rotaryEncoderHandler(Down);
         }
     }
 
-    if (readButton() == true) {
+    if (readButton() == true)
+    {
         Input::shared().rotaryEncoderHandler(Clicked);
     }
 }
