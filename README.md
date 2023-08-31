@@ -115,6 +115,7 @@ If you want to go all-in and asemble one of these for yourself, 3D printing file
 
 There's a lot more this platform could do, but this is the minimally-useful implementation that can get your whole heat pump system integrated in with an afternoon of work. Future features:
 
+- [ ] Celsius support (what can I say, I think in Fahrenheit)
 - [ ] Display alerts issued from Home Assistant
 - [ ] Trigger alerts distributed to all other ThermTerm devices on the network
 - [ ] Set preferences, including WiFi and MQTT credentials, via serial terminal
@@ -124,6 +125,7 @@ There's a lot more this platform could do, but this is the minimally-useful impl
 
 If you have anything useful you'd like to give back, feel free. Of particular interest:
 
+- A simple Celsius toggle. A preprocessor macro would be fine to start with. All the internal state is managed in Celsius, and `SystemState` already has partial support for it.
 - I can only test with Mitsubishi 144-bit IR receivers, since that's all I have. If you have a working interface for a different manufacturer, open a PR to add it!
 - This is the most C++ I've ever written. If there's anything goofy that could be done differently, feel free to propose it
 - Relatedly, if you have thoughts on making this project more extensible with other displays and ESP32 variants, I'd love to hear about it
