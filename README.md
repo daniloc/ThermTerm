@@ -34,8 +34,8 @@ Through a TFT screen, readouts are visible any time of day. The chunky dial is e
 ## Shoutouts/core dependencies
 
 - [Adafruit](https://learn.adafruit.com), whose thorough libraries and thoughtful breakout boards made hardware integration a breeze
-- `[IRRemoteESP8266](https://github.com/crankyoldgit/IRremoteESP8266)`, a library with bulletproof software-based PWM, a great API, and a shocking compendium of IR protocols
-- `[arduino-home-assistant](https://github.com/dawidchyrzynski/arduino-home-assistant)`, an MQTT library with exhaustive implementations of Home Assistant-supported devices
+- [`IRRemoteESP8266`](https://github.com/crankyoldgit/IRremoteESP8266), a library with bulletproof software-based PWM, a great API, and a shocking compendium of IR protocols
+- [`arduino-home-assistant`](https://github.com/dawidchyrzynski/arduino-home-assistant), an MQTT library with exhaustive implementations of Home Assistant-supported devices
 
 ## Bill of materials
 
