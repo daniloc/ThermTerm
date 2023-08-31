@@ -16,6 +16,8 @@ You can affix these components to a piece of cardboard to test things out and en
 
 For something you can mount to the wall, a case design is provided. You'll want to orient all parts with their flattest faces against the print bed.
 
+<img width="1081" alt="Screenshot 2023-08-31 at 12 02 12 AM" src="https://github.com/daniloc/ThermTerm/assets/213358/98896f95-0a88-45fc-a6c2-cb56f115571c">
+
 The design looks and works great using draft-quality layers at 0.3mm, but **you'll want to use PETG for the print**. While prototyping the case, I found PLA to be too brittle for the various posts that hold the components in place.
 
 If your bridging is well tuned, you shouldn't need supports.
@@ -42,3 +44,5 @@ The rotary encoder breakout gets a lot of impact, so I'd suggest anchoring it in
 To manage the StemmaQT cables, use the raceway molded into the base to tuck the longest cable run, from ESP32 to the light sensor. For the shorter cables, fold them gently against the case to prevent the dial scraping against them.
 
 <img height=400 src="https://github.com/daniloc/ThermTerm/assets/213358/06c2e1fd-6643-43c7-a856-0c1246508d2f">
+
+If desired, print the key caps and press-fit them into the rectangular holes on the front of the case. Pop on the dial, and you're done.
