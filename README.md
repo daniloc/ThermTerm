@@ -1,6 +1,6 @@
 # ThermTerm: an open source heat pump controller and home automation terminal, built on ESP32
 
-![image](https://github.com/daniloc/ThermTerm/assets/213358/c3d5e749-000b-4d88-8361-5ec403e4682f)
+![264734232-c3d5e749-000b-4d88-8361-5ec403e4682f](https://github.com/daniloc/ThermTerm/assets/213358/ca5ceeaf-8f8e-4620-9f28-7fdfa21065ee)
 
 **Control heatpumps manually or remotely via MQTT/Home Assistant**.
 
