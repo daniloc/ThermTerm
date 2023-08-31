@@ -1,6 +1,6 @@
 # ThermTerm: an open source heat pump controller and home automation terminal, built on ESP32
 
-**Control heatpumps manually or remotely, using MQTT/Home Assistant**.
+**Control heatpumps manually or remotely via MQTT/Home Assistant**.
 
 I love my heat pumps. They're energy efficient and the fastest way to heat or cool any room.
 
