@@ -51,7 +51,7 @@ Through a TFT screen, readouts are visible any time of day. The chunky dial is e
 - [SHTC3 Temperature/humidity sensor](https://www.adafruit.com/product/4636)
 - [BH1750 Light sensor](https://www.adafruit.com/product/4681)
 - 1 [100mm StemmaQT/Qwiic cable](https://www.adafruit.com/product/4210)
-- 2 [50mm StemmaQT/Qwicc cables](https://www.adafruit.com/product/4399)
+- 2 [50mm StemmaQT/Qwiic cables](https://www.adafruit.com/product/4399)
 - Wires for the IR blaster (I trimmed one of [these](https://www.adafruit.com/product/4336))
 - USB-C cable ([right angle designs](https://www.amazon.com/dp/B08912ZBHZ) look best)
 - A 5v USB power supply
