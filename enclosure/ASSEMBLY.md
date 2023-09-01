@@ -25,7 +25,7 @@ The design looks and works great using draft-quality layers at 0.3mm, but **you'
 
 If your bridging is well tuned, you shouldn't need supports.
 
-The knob/dial piece really should be printed with translucent PETG. This allows you to see the status light on the rotary encoder, and it's probably important for the IR signal to escape as well.
+The knob/dial piece really should be printed with translucent PETG. This allows you to see the status light on the rotary encoder, and it's probably important for the IR signal to escape as well. If you want to be fancy, it's nice to ask your slicer for a more interesting bottom infill pattern, since light will shine through it. In PrusaSlicer, I chose `Octagram Spiral`.
 
 ## Assembly
 
