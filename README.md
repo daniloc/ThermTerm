@@ -2,7 +2,7 @@
 
 ![264734232-c3d5e749-000b-4d88-8361-5ec403e4682f](https://github.com/daniloc/ThermTerm/assets/213358/ca5ceeaf-8f8e-4620-9f28-7fdfa21065ee)
 
-**Control heatpumps manually or remotely via MQTT/Home Assistant**.
+**Control heat pumps manually or remotely via MQTT/Home Assistant**.
 
 I love my heat pumps. They're energy efficient and the fastest way to heat or cool any room.
 
