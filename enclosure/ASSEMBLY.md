@@ -31,6 +31,8 @@ The knob/dial piece really should be printed with translucent PETG. This allows 
 
 To use the included case design, wire up the components as described above. Sensors are held in place by slots, while posts hold the IR blaster, rotary encoder, and ESP32 board in place.
 
+The IR blaster leads should be trimmed to around 50mm.
+
 <img height=400 src="https://github.com/daniloc/ThermTerm/assets/213358/abd60699-070d-47b1-a586-06f9e2527edb">
 
 <img height=400 src="https://github.com/daniloc/ThermTerm/assets/213358/94811e0e-3148-46a2-a6f9-cef78c4bb0bc">
