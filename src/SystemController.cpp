@@ -204,9 +204,9 @@ void SystemController::setLux(float lux)
 
 void SystemController::setSetPoint(float setPoint)
 {
-    if (setPoint != state_.setPoint)
+    if (setPoint != state_.getSetPointUIValue())
     {
-        state_.setPoint = setPoint;
+        state_.updateSetPoint(setPoint);
         haInterface_.getHVACDevice().setTargetTemperature(setPoint);
         scheduleUpdate();
         notifyObservers();
@@ -232,7 +232,7 @@ void SystemController::setFanSpeed(HvacFanMode fanSpeed)
 
 void SystemController::incrementSetPoint()
 {
-    float setPoint = state_.setPoint;
+    float setPoint = state_.getSetPointUIValue();
     setPoint += setPointStep;
     setSetPoint(setPoint);
     Audio::play_UpwardTone();
@@ -240,7 +240,7 @@ void SystemController::incrementSetPoint()
 
 void SystemController::decrementSetPoint()
 {
-    float setPoint = state_.setPoint;
+    float setPoint = state_.getSetPointUIValue();
     setPoint -= setPointStep;
     setSetPoint(setPoint);
     Audio::play_DownwardTone();

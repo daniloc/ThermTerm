@@ -27,7 +27,7 @@ void SetPointView::draw()
 
     tft.setCursor(0, 60);                                // set cursor position, adjust as necessary
     tft.setTextSize(7);                                  // set text size, adjust as necessary
-    tft.print(String(int(controller_.getState().setPoint))); // print the string
+    tft.print(String(int(controller_.getState().getSetPointUIValue()))); // print the string
 }
 
 void SetPointView::handleInputEvent(UserInput input)

@@ -69,7 +69,7 @@ void StatusView::draw()
     tft.setTextColor(ST77XX_BLACK, ST77XX_BLACK);
   }
 
-  BaseView::drawTextRightAligned(100, "Set: " + String(stateData.setPoint));
+  BaseView::drawTextRightAligned(100, "Set: " + String(int(stateData.getSetPointUIValue())));
 
   tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
 

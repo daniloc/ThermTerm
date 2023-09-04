@@ -6,7 +6,7 @@
 struct HVACCommand
 {
     HvacMode hvacMode;
-    int setPoint;
+    float setPoint;
     HvacFanMode fanMode;
     HvacVaneMode vaneMode;
     HvacPower power;
@@ -16,7 +16,7 @@ struct SystemState
 {
     float temperature = 0.0;
     float humidity = 0.0;
-    float setPoint = 65;
+    float setPointC = 18;
     float lux = 0;
     HvacMode hvacMode = HVAC_COLD;
     HvacFanMode fanSpeed = FAN_SPEED_4;
@@ -24,15 +24,27 @@ struct SystemState
 
     bool celsius = false;
 
-    int heatPumpSetPoint()
+    float getSetPointUIValue()
     {
         if (celsius)
         {
-            return int(setPoint);
+            return setPointC;
         }
         else
         {
-            return int((setPoint - 32) * 5.0 / 9.0);
+            return setPointC * 9.0 / 5.0 + 32;
+        }
+    }
+
+    void updateSetPoint(float newSetPoint)
+    {
+        if (celsius)
+        {
+            setPointC = newSetPoint;
+        }
+        else
+        {
+            setPointC = (newSetPoint - 32) * 5.0 / 9.0;
         }
     }
 
@@ -40,7 +52,7 @@ struct SystemState
     {
         HVACCommand command;
         command.hvacMode = hvacMode;
-        command.setPoint = setPoint;
+        command.setPoint = setPointC;
         command.fanMode = fanSpeed;
         command.vaneMode = VANE_AUTO;
         command.power = power;
