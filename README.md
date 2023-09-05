@@ -20,9 +20,9 @@ Press the dial to toggle power.
 
 Turn the dial to set temperature.
 
-Change to heat mode with the bottom bottom, cool mode with the top. Set fan speed by pressing the center button, then turn the dial.
+Change to heat mode with the bottom button, cool mode with the top. Set fan speed by pressing the center button, then turn the dial.
 
-Through a TFT screen, readouts are visible any time of day. The chunky dial is easy to press without looking. Program automations using Home Assitant, not miserable rubber buttons on an awkward remote. Toggle your heat pumps from any room in the house, or even while you're away.
+Through a TFT screen, readouts are visible any time of day. The chunky dial is easy to press without looking. Program automations using Home Assitant, not miserable rubber buttons like a VCR. Toggle your heat pumps from any room in the house, or even while you're away.
 
 ## Goals
 
