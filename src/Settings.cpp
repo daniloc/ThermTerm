@@ -1,3 +1,5 @@
+//nb: not currently implemented
+
 #include "Settings.h"
 
 #include <SimpleCLI.h>
