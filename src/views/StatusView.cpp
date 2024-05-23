@@ -22,31 +22,34 @@ void StatusView::draw()
 
   uint16_t tempMeterColor;
 
-  if (stateData.power == OFF)
-  {
-    tempMeterColor = ST77XX_WHITE;
-    Display::shared().setStatusLight(Display::StatusLight::Off);
-  }
-  else if (stateData.hvacMode == HVAC_HOT)
-  { // heat
-    tempMeterColor = ST77XX_RED;
-
-    Display::shared().setStatusLight(Display::StatusLight::Red);
-  }
-  else if (stateData.hvacMode == HVAC_COLD)
-  { // cool
-    tempMeterColor = ST77XX_BLUE;
-    Display::shared().setStatusLight(Display::StatusLight::Blue);
-  }
-  else
-  { // other modes
-    tempMeterColor = ST77XX_WHITE;
-    Display::shared().setStatusLight(Display::StatusLight::White);
-  }
-
   if (controller_.shouldDimScreen())
   {
     Display::shared().setStatusLight(Display::StatusLight::Off);
+  }
+  else
+  {
+
+    if (stateData.power == OFF)
+    {
+      tempMeterColor = ST77XX_WHITE;
+      Display::shared().setStatusLight(Display::StatusLight::Off);
+    }
+    else if (stateData.hvacMode == HVAC_HOT)
+    { // heat
+      tempMeterColor = ST77XX_RED;
+
+      Display::shared().setStatusLight(Display::StatusLight::Red);
+    }
+    else if (stateData.hvacMode == HVAC_COLD)
+    { // cool
+      tempMeterColor = ST77XX_BLUE;
+      Display::shared().setStatusLight(Display::StatusLight::Blue);
+    }
+    else
+    { // other modes
+      tempMeterColor = ST77XX_WHITE;
+      Display::shared().setStatusLight(Display::StatusLight::White);
+    }
   }
 
   tft.setTextColor(tempMeterColor, ST77XX_BLACK);
@@ -69,7 +72,7 @@ void StatusView::draw()
     tft.setTextColor(ST77XX_BLACK, ST77XX_BLACK);
   }
 
-  BaseView::drawTextRightAligned(100, "Set: " + String(int(stateData.getSetPointUIValue())));
+  BaseView::drawTextRightAligned(100, "Set: " + String(int(stateData.getSetPointUIValue())) + "  ");
 
   tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
 
@@ -110,7 +113,7 @@ void StatusView::handleInputEvent(UserInput input)
     controller_.incrementSetPoint();
     break;
   case RotaryDown:
-  
+
     if (controller_.getState().power == OFF)
     {
       return;
