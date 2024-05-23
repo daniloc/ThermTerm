@@ -5,3 +5,4 @@
 .vscode/ipch
 .VSCodeCounter/*
 /src/_Credentials.h
+.DS_Store
