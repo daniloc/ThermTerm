@@ -20,36 +20,58 @@ void StatusView::draw()
   // populate text based on state values
   // (you'll need to convert the floats to strings)
 
+  // initialize tempMeterColor with a default value
   uint16_t tempMeterColor;
-
-  if (controller_.shouldDimScreen())
+  if (stateData.power == OFF)
   {
-    Display::shared().setStatusLight(Display::StatusLight::Off);
+    tempMeterColor = ST77XX_WHITE;
   }
   else
   {
+    switch (stateData.hvacMode)
+    {
+    case HVAC_HOT: // heat
+      tempMeterColor = ST77XX_RED;
+      break;
 
+    case HVAC_COLD: // cool
+      tempMeterColor = ST77XX_BLUE;
+      break;
+
+    default: // other modes
+      tempMeterColor = ST77XX_WHITE;
+      break;
+    }
+  }
+
+  // Only set StatusLight if shouldDimScreen() returns false
+  if (!controller_.shouldDimScreen())
+  {
     if (stateData.power == OFF)
     {
-      tempMeterColor = ST77XX_WHITE;
       Display::shared().setStatusLight(Display::StatusLight::Off);
     }
-    else if (stateData.hvacMode == HVAC_HOT)
-    { // heat
-      tempMeterColor = ST77XX_RED;
-
-      Display::shared().setStatusLight(Display::StatusLight::Red);
-    }
-    else if (stateData.hvacMode == HVAC_COLD)
-    { // cool
-      tempMeterColor = ST77XX_BLUE;
-      Display::shared().setStatusLight(Display::StatusLight::Blue);
-    }
     else
-    { // other modes
-      tempMeterColor = ST77XX_WHITE;
-      Display::shared().setStatusLight(Display::StatusLight::White);
+    {
+      switch (stateData.hvacMode)
+      {
+      case HVAC_HOT: // heat
+        Display::shared().setStatusLight(Display::StatusLight::Red);
+        break;
+
+      case HVAC_COLD: // cool
+        Display::shared().setStatusLight(Display::StatusLight::Blue);
+        break;
+
+      default: // other modes
+        Display::shared().setStatusLight(Display::StatusLight::White);
+        break;
+      }
     }
+  }
+  else
+  {
+    Display::shared().setStatusLight(Display::StatusLight::Off);
   }
 
   tft.setTextColor(tempMeterColor, ST77XX_BLACK);
